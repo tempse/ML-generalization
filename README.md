@@ -22,6 +22,12 @@ The software has been developed using Ubuntu 16.04. With the provided setup scri
     python setup.py install
     ```
 
+    Alternatively, one can run
+    ```
+    pip install numpy
+    pip install -r requirements.txt
+    ```
+
 ## Running the tests
 
 To run the automated tests, execute `python -m unittest discover generalization/tests/`.
