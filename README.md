@@ -1,7 +1,8 @@
 # A Machine Learning Framework for Classifier Generalization Studies
 ![](https://img.shields.io/badge/python-3.5-blue.svg) ![](https://img.shields.io/badge/version-0.1.0-yellow.svg)
 
-    
+> This framework has been developed in the course of the Machine Learning lecture 184.702 at TU Wien.
+        
 ## Installation
 
 The software has been developed using Ubuntu 16.04. With the provided setup script, it should however be deployable to other platforms as well.
@@ -27,7 +28,7 @@ To run the automated tests, execute `python -m unittest discover generalization/
 
 ## Run and control the software
 
-Look at [these instructions](https://github.com/tempse/ML_184.702/wiki/ML-software-(third-assignment)), for the time being.
+Look at [these instructions](https://github.com/tempse/ML-generalization/wiki), for the time being.
 
 ## Uninstall the software
 
