@@ -1,5 +1,5 @@
 # A Machine Learning Framework for Classifier Generalization Studies
-![](https://img.shields.io/badge/python-3.5-blue.svg) ![](https://img.shields.io/badge/version-0.1.0-yellow.svg)
+![](https://img.shields.io/badge/python-3.5-blue.svg) ![](https://img.shields.io/badge/version-0.1.0-yellow.svg) [![codebeat badge](https://codebeat.co/badges/77d8ab35-0dce-48ac-a6a3-778297b0d823)](https://codebeat.co/projects/github-com-tempse-ml-generalization-master)
 
 > This framework has been developed in the course of the Machine Learning lecture 184.702 at TU Wien.
         
