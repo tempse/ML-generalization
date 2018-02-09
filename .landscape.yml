@@ -1,0 +1,13 @@
+doc-warnings: false
+test-warnings: false
+strictness: medium
+autodetect: true
+requirements:
+  - requirements.txt
+ignore-paths:
+  - config
+ignore-patterns:
+  - ^example/doc_.*\.py$
+  - (^|/)docs(/|$)
+python-targets:
+  - 3
