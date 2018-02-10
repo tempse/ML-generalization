@@ -33,15 +33,15 @@ def evaluate_nfold(X, y, model, num_test_samples, scoring='f1_score',
 
     """
 
-    assert isinstance(X, pd.DataFrame) or isinstance(X, np.ndarray), \
-        'feature matrix X is neither a numpy array nor a pandas dataframe'
+    if not isinstance(X, pd.DataFrame) and not isinstance(X, np.ndarray):
+        raise ValueError,'feature matrix X is neither a numpy array nor a pandas dataframe'
 
-    assert isinstance(y, pd.DataFrame) or isinstance(y, np.ndarray) or \
-        isinstance(y, pd.core.series.Series), \
-        'target vector y is neither a numpy array nor a pandas dataframe'
+    if not isinstance(y, pd.DataFrame) and not isinstance(y, np.ndarray) or \
+        not isinstance(y, pd.core.series.Series):
+        raise ValueError, 'target vector y is neither a numpy array nor a pandas dataframe'
 
-    assert isinstance(num_test_samples, int), \
-        'invalid, non-integer number of test samples: {}'.format(num_test_samples)
+    if not isinstance(num_test_samples, int):
+        raise ValueError,'invalid, non-integer number of test samples: {}'.format(num_test_samples)
 
     supported_scoring_funcs = {
         'accuracy_score': accuracy_score,
@@ -52,11 +52,13 @@ def evaluate_nfold(X, y, model, num_test_samples, scoring='f1_score',
         'zero_one_loss': zero_one_loss
     }
     
-    assert isinstance(scoring, str) and scoring in supported_scoring_funcs.keys(), \
-        'invalid scoring function: {} (should be one of {})'.format(
+    if not isinstance(scoring, str) or \
+       not scoring in supported_scoring_funcs.keys():
+        raise ValueError,'invalid scoring function: {} (should be one of {})'.format(
             scoring, [i for i in supported_scoring_funcs.keys()])
 
-    assert isinstance(bootstrapping, bool)
+    if not isinstance(bootstrapping, bool):
+        raise ValueError,'bootstrapping attribute is not boolean'
 
     if num_test_samples < 1:
         raise ValueError('num_test_sample must be larger than 1, ' \
@@ -105,9 +107,9 @@ def performance_difference(scores):
 
     """
 
-    assert isinstance(scores, collections.Sequence) \
-        and not isinstance(scores, str), \
-        'passed argument is not a list object'
+    if not isinstance(scores, collections.Sequence) \
+        or isinstance(scores, str):
+        raise ValueError,'passed argument is not a list object'
 
     comb_indices = list(combinations([x for x in range(len(scores))], 2))
 
