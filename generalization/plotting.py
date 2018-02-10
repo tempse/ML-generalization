@@ -22,7 +22,7 @@ def plot_performance_diff(*arrays, **options):
         The created plot as a matplotlib figure
 
     """
-    
+
     if len(arrays) < 3:
         raise ValueError('at least three arrays (splits, mean, std) ' \
                          'required as input')
@@ -30,7 +30,8 @@ def plot_performance_diff(*arrays, **options):
         raise ValueError('even number of arrays, they have to come in ' \
                          'splits + n*(mean-std pairs)')
 
-    assert all([isinstance(arrays[i], np.ndarray) for i in range(len(arrays))])
+    if not all([isinstance(arrays[i], np.ndarray) for i in range(len(arrays))]):
+        raise ValueError('not all passed arrays are numpy arrays')
 
     labels = options.pop('labels', None)
     xlabel = options.pop('xlabel', 'x')
@@ -69,7 +70,7 @@ def plot_performance_diff(*arrays, **options):
         curve, = plt.plot(arrays[0], arrays[arr])
         plt.fill_between(arrays[0],
                          arrays[arr]-arrays[arr+1], arrays[arr]+arrays[arr+1],
-                         alpha=0.3)            
+                         alpha=0.3)
         curves.append(curve)
 
     if train_difference is not None:

@@ -10,7 +10,7 @@ def load_data(data_params):
     Simple wrapper for a pandas file import method.
 
     Takes a dictionary of data parameters.
-    
+
     Required items in data_params dictionary:
     - data_path
     - data_read_func

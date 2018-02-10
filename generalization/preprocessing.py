@@ -21,10 +21,13 @@ def parse_target_labels(y, pos_label, neg_label):
 
     """
 
-    assert isinstance(y, pd.DataFrame) or isinstance(y, pd.core.series.Series)
+    if not isinstance(y, pd.DataFrame) and \
+       not isinstance(y, pd.core.series.Series):
+        raise ValueError('invalid type for target vector y')
     #assert isinstance(pos_label, str)
     #assert isinstance(neg_label, str)
-    assert pos_label != neg_label
+    if pos_label == neg_label:
+        raise ValueError('positive and negative labels are the same')
 
     if not isinstance(y, pd.core.series.Series) and y.shape[1]!=1:
         raise ValueError('target vector has to be one-dimensional, but has ' \

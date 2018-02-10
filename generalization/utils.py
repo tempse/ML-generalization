@@ -40,8 +40,8 @@ def get_optimal_CV_n_folds(X_train, y_train, average_over_n_fits=1):
         # calculate the best # of folds as an average 
         for nfolds in range(3,10):
             # fit here the data with model
-            scores = cross_validate(model, X_train, y_train, 
-                                    cv                 = nfolds, 
+            scores = cross_validate(model, X_train, y_train,
+                                    cv                 = nfolds,
                                     scoring            = metric,
                                     n_jobs             = -1,
                                     return_train_score = True)

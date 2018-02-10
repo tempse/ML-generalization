@@ -31,11 +31,14 @@ def delete_old_sessions(folder, keep_sessions=20):
 
     """
 
-    assert isinstance(folder, str)
-    assert isinstance(keep_sessions, int) or keep_sessions is None
+    if not isinstance(folder, str):
+        raise ValueError('folder attribute is not a string')
+    
+    if not isinstance(keep_sessions, int) and keep_sessions is not None:
+        raise ValueError('keep_sessions attribute is not int or None')
 
-    if keep_sessions is not None:
-        assert (keep_sessions > 0), 'variable "keep_sessions" must be > 0'
+    if keep_sessions is not None and keep_sessions <= 0:
+        raise ValueError('variable "keep_sessions" must be > 0')
     
     if keep_sessions is None:
         # skip any cleaning operations
@@ -108,8 +111,11 @@ class OutputManager:
 
     def __init__(self, output_basepath='output/', keep_sessions=20):
 
-        assert isinstance(output_basepath, str)
-        assert isinstance(keep_sessions, int) or keep_sessions is None
+        if not isinstance(output_basepath, str):
+            raise ValueError('output_basepath attribute is not a string')
+        
+        if not isinstance(keep_sessions, int) and keep_sessions is not None:
+            raise ValueError('keep_sessions is not int or None')
 
         if not os.path.isabs(output_basepath):
             output_basepath = os.path.abspath(output_basepath)
@@ -154,8 +160,11 @@ class OutputManager:
             The path of the current session folder (incl. a subfolder, if specified).
         """
         
-        assert isinstance(subfolder, str) or subfolder is None
-        assert os.path.exists(self.session_dir)
+        if not isinstance(subfolder, str) and subfolder is not None:
+            raise ValueError('subfolder attribute is not string or None')
+        
+        if not os.path.exists(self.session_dir):
+            raise IOError('path {} does not exist'.format(self.session_dir))
         
         if subfolder is not None and \
            not os.path.exists(self.session_dir+'/'+subfolder):
@@ -182,9 +191,14 @@ class OutputManager:
                           '(just re-run the program to fix this)'.format(
                               self.session_dir))
 
-        assert isinstance(output_name, str)
-        assert isinstance(folder, str) or folder is None
-        assert isinstance(to_arff, bool) or to_arff is None
+        if not isinstance(output_name, str):
+            raise ValueError('output_name attribute is not a string')
+        
+        if not isinstance(folder, str) and folder is not None:
+            raise ValueError('folder attribute is not string or None')
+        
+        if not isinstance(to_arff, bool) and to_arff is not None:
+            raise ValueError('to_arff attribute is not boolean or None')
 
         output_basename = self.session_dir
 

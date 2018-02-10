@@ -61,7 +61,7 @@ def main():
     # collection of performance measures to be applied to the test set(s)
     scoring_funcs = ['accuracy_score', 'precision_score', 'recall_score', \
                      'f1_score']
-                
+
     final_results_labels = [
         'dataset',
         'model',

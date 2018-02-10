@@ -51,7 +51,7 @@ def evaluate_nfold(X, y, model, num_test_samples, scoring='f1_score',
         'roc_auc_score': roc_auc_score,
         'zero_one_loss': zero_one_loss
     }
-    
+
     if not isinstance(scoring, str) or \
        scoring not in supported_scoring_funcs.keys():
         raise ValueError('invalid scoring function: {} (should be one of {})'.format(
@@ -118,7 +118,7 @@ def performance_difference(scores):
     
     scores_diff = []
 
-    for i in range(len(comb_indices)):
+    for i,j in enumerate(comb_indices):
         scores_diff.append(abs(scores[comb_indices[i][0]] - 
                                scores[comb_indices[i][1]]))
 
