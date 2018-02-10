@@ -35,7 +35,7 @@ def config_file_to_dict(filename):
     """
 
     if not isinstance(filename, str):
-        raise ValueError, '{} is not a string'.format(filename)
+        raise ValueError('{} is not a string'.format(filename))
     
     if not os.path.isfile(filename):
         raise IOError('File {} does not exist.'.format(filename))
@@ -53,7 +53,7 @@ def check_data_config_requirements(data_params):
     """
 
     if not isinstance(data_params, dict):
-        raise ValueError, 'Passed argument is not a dictionary'
+        raise ValueError('Passed argument is not a dictionary')
     
     required_keys = ['data_identifier',
                      'data_path',
