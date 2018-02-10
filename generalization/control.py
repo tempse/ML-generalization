@@ -34,7 +34,8 @@ def config_file_to_dict(filename):
     Imports an entire config file and returns it as a dictionary.
     """
 
-    assert isinstance(filename, str), '{} is not a string'.format(filename)
+    if not isinstance(filename, str):
+        raise ValueError, '{} is not a string'.format(filename)
     
     if not os.path.isfile(filename):
         raise IOError('File {} does not exist.'.format(filename))
@@ -51,7 +52,8 @@ def check_data_config_requirements(data_params):
     Check if the data_params dictionary contains all the required keys.
     """
 
-    assert isinstance(data_params, dict), 'Passed argument is not a dictionary'
+    if not isinstance(data_params, dict):
+        raise ValueError, 'Passed argument is not a dictionary'
     
     required_keys = ['data_identifier',
                      'data_path',
