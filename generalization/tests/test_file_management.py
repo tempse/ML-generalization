@@ -12,8 +12,8 @@ from generalization.file_management import OutputManager, delete_old_sessions
 class TestFileManagement(unittest.TestCase):
 
     def test_delete_old_sessions(self):
-        import os, shutil, time
-        
+        import time, os
+
         with tempfile.TemporaryDirectory() as tmpdir:
             os.chdir(tmpdir)
             num_testfolders = 15
@@ -23,7 +23,7 @@ class TestFileManagement(unittest.TestCase):
                 time.sleep(.1) # provide a coarse enough time resolution
 
             assert len(os.listdir(tmpdir)) == num_testfolders
-            
+
             # test case: set higher limit to skip cleanup
             num_folders_before = len(os.listdir(tmpdir))
             delete_old_sessions(tmpdir, keep_sessions=num_testfolders+1)
@@ -36,7 +36,7 @@ class TestFileManagement(unittest.TestCase):
 
             for i in range(num_testfolders-num_keep_folders):
                 assert not os.path.exists(tmpdir + '/session_{}'.format(i))
-                
+
             for i in range(num_testfolders-num_keep_folders, num_testfolders):
                 assert os.path.exists(tmpdir + '/session_{}'.format(i))
 
@@ -56,16 +56,15 @@ class TestFileManagement(unittest.TestCase):
         import numpy as np
         import pandas as pd
         import matplotlib.pyplot as plt
-        import pickle
-        
+
         with tempfile.TemporaryDirectory() as tmpdir:
             os.chdir(tmpdir)
             om = OutputManager('output/')
-            
+
             assert os.path.exists(tmpdir+'/output/')
-            
+
             os.chdir(tmpdir+'/output/')
-            
+
             try:
                 session_name = sorted([f for f in os.listdir(tmpdir+'/output/')],
                                       key=os.path.getctime)[-1]
@@ -104,7 +103,7 @@ class TestFileManagement(unittest.TestCase):
             assert isinstance(om.get_session_folder(), str)
             with self.assertRaises(OSError):
                 om.get_session_folder('notAnActualSubfolder')
-                
+
 
 
 if __name__ == '__main__':

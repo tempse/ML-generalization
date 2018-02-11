@@ -2,7 +2,6 @@ import sys
 import warnings
 import time
 import argparse
-import ast
 
 import numpy as np
 import pandas as pd
@@ -61,7 +60,7 @@ def main():
     # collection of performance measures to be applied to the test set(s)
     scoring_funcs = ['accuracy_score', 'precision_score', 'recall_score', \
                      'f1_score']
-                
+
     final_results_labels = [
         'dataset',
         'model',
@@ -81,10 +80,10 @@ def main():
     final_results_labels += ['test_{}_diff_std'.format(i) for i in scoring_funcs]
     final_results_labels += ['test_{}_diff_mean_bootstrap'.format(i) for i in scoring_funcs]
     final_results_labels += ['test_{}_diff_std_bootstrap'.format(i) for i in scoring_funcs]
-    
+
     final_results = pd.DataFrame(columns=final_results_labels)
 
-    
+
     # loop over all sections of the data params config file
     for d_cnt,d in enumerate(data_config):
 
@@ -92,7 +91,7 @@ def main():
             d,d_cnt+1,len(data_config)), '=', 50)
 
         current_data_results = {}
-        
+
         current_data_params = data_config[d]
         check_data_config_requirements(current_data_params)
 
@@ -102,7 +101,7 @@ def main():
         print_info('Preparing target vector...', ':')
         X = data.drop(current_data_params['data_target_col'], axis=1)
         y = data[current_data_params['data_target_col']]
-        
+
         y = parse_target_labels(y,
                                 current_data_params['data_target_positive_label'],
                                 current_data_params['data_target_negative_label'])
@@ -133,18 +132,18 @@ def main():
             print_info('Optimizing the number of cross-validation folds...', ':')
             num_CV_folds = get_optimal_CV_n_folds(X_train.as_matrix(), y_train.as_matrix())
 
-            
+
         for mod in model_config:
 
             print_info('Training model: {}'.format(mod), '-', 50)
-            
+
             try:
                 model_params = model_config[mod]
                 model = supported_models[mod](**model_params)
             except KeyError:
                 raise KeyError('Model {} not supported. Choose a valid input ' \
                                'from this list: {}'.format(mod, supported_models))
-            
+
             fitkwargs = {'X': X_train, 'y': y_train}
             if do_optimize_params:
                 print_info('Optimizing hyperparameters...', ':')
@@ -156,7 +155,7 @@ def main():
             print_info('Fitting the model...', ':')
             model.fit(**fitkwargs)
             elapsed_time_train = time.time() - start_time_train
-            
+
             model_parameters = get_search_results(model)
 
             # evaluate model on the training sample
@@ -172,16 +171,16 @@ def main():
                                   'Ignoring and continuing...'.format(
                                       scoring_func))
 
-                    
+
             # evaluate model on the test sample(s)
             print_info('Evaluating the model on the test sample(s)...', ':')
 
             test_performance_1fold = -1 # must be initialized with a negative number
-            
+
             for t in range(1,num_test_samples+1):
 
                 start_time_test = time.time()
-                
+
                 for scoring_func in scoring_funcs:
                     try:
                         model_scores_test = evaluate_nfold(X_test, y_test, model, t,
@@ -190,12 +189,12 @@ def main():
                         model_scores_test_bootstrap = evaluate_nfold(X_test, y_test, model, t,
                                                                      scoring=scoring_func,
                                                                      bootstrapping=True)
-                        
+
                         if test_performance_1fold < 0:
                             test_performance_1fold = model_scores_test[0]
                         else:
                             pass
-                        
+
                         current_data_results['test_{}_1fold'.format(
                             scoring_func)] = test_performance_1fold
 
@@ -222,7 +221,7 @@ def main():
                             scoring_func)] = scores_mean_bootstrap
                         current_data_results['test_{}_diff_std_bootstrap'.format(
                             scoring_func)] = scores_std_bootstrap
-                        
+
                     except ValueError:
                         warnings.warn('ValueError when evaluating with {}. ' \
                                       'Ignoring and continuing...'.format(
@@ -241,8 +240,7 @@ def main():
                             scoring_func)] = -1
                         current_data_results['test_{}_diff_std_bootstrap'.format(
                             scoring_func)] = -1
-                        pass
-                        
+
                 print_info('Model score differences (mean, std) for {} ' \
                            'test sample folds: {:.5f}, {:.5f}'.format(
                                t, scores_mean, scores_std))
@@ -268,7 +266,7 @@ def main():
         scoring_func_plot = 'f1_score'
 
         train_differences = []
-        
+
         current_data_plot_nsplits = final_results.query('(dataset=="{}") & (model=="{}")'.format(
             d,mod))['num_test_sets']
 
@@ -338,7 +336,7 @@ def main():
                 plot_filename += '_zoomed-{}'.format(lim)
 
             om.save(current_data_plot, plot_filename)
-            
+
             current_data_plot = plot_performance_diff(
                 *current_data_plot_xyvals,
                 labels = [m for m in model_config],
@@ -349,7 +347,7 @@ def main():
             plot_filename = '{}_performance-diff_num-splits'.format(d)
             if lim is not None:
                 plot_filename += '_zoomed-{}'.format(lim)
-                
+
             om.save(current_data_plot, plot_filename)
 
             current_data_plot = plot_performance_diff(
@@ -362,7 +360,7 @@ def main():
             plot_filename = '{}_performance-diff_max_num-splits'.format(d)
             if lim is not None:
                 plot_filename += '_zoomed-{}'.format(lim)
-                
+
             om.save(current_data_plot, plot_filename)
 
             current_data_plot = plot_performance_diff(
@@ -375,9 +373,9 @@ def main():
             plot_filename = '{}_performance-diff_max_num-splits_bootstrap'.format(d)
             if lim is not None:
                 plot_filename += '_zoomed-{}'.format(lim)
-                
+
             om.save(current_data_plot, plot_filename)
-            
+
             current_data_plot = plot_performance_diff(
                 *current_data_plot_xyvals_bootstrap,
                 labels = [m for m in model_config],
@@ -389,9 +387,9 @@ def main():
             plot_filename = '{}_performance-diff_num-splits_full_bootstrap'.format(d)
             if lim is not None:
                 plot_filename += '_zoomed-{}'.format(lim)
-                
+
             om.save(current_data_plot, plot_filename)
-            
+
             current_data_plot = plot_performance_diff(
                 *current_data_plot_xyvals_bootstrap,
                 labels = [m for m in model_config],
@@ -402,7 +400,7 @@ def main():
             plot_filename = '{}_performance-diff_num-splits_bootstrap'.format(d)
             if lim is not None:
                 plot_filename += '_zoomed-{}'.format(lim)
-                
+
             om.save(current_data_plot, plot_filename)
 
 
@@ -418,7 +416,7 @@ def main():
         print_info('Everything done. (Elapsed overall time: {} seconds)\n'.format(
             time.time() - start_time_main))
 
-        
+
 if __name__ == '__main__':
 
     if sys.version_info[0] < 3:
@@ -432,7 +430,7 @@ if __name__ == '__main__':
 
     output_path = 'output/'
     config_path = 'config/'
-    
+
     om = OutputManager(output_path, keep_sessions=20)
     sys.stdout = logger(om.get_session_folder())
 

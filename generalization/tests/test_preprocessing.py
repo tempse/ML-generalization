@@ -33,20 +33,20 @@ class TestFileManagement(unittest.TestCase):
             parse_target_labels(y_multiclass, pos_label, neg_label)
 
         assert np.all(y_parsed == parse_target_labels(y, pos_label, neg_label))
-        
-    
+
+
     def test_PreprocessingManager(self):
         import os
         import numpy as np
         from numpy.testing import assert_almost_equal
         import pandas as pd
-        
+
         with tempfile.TemporaryDirectory() as tmpdir:
             os.chdir(tmpdir)
             pm = PreprocessingManager(tmpdir)
-            
+
             with self.assertRaises(TypeError):
-                pm_fail = PreprocessingManager(100)
+                PreprocessingManager(100)
 
             # STANDARD SCALING
             X = pd.DataFrame([1,0,2])
@@ -83,7 +83,7 @@ class TestFileManagement(unittest.TestCase):
 
             X = pm.parse_object_columns(X, False)
             assert_almost_equal(X.as_matrix(), target_X.as_matrix())
-            assert os.path.exists(pm.get_output_path() + 'parse_object_columns_mapping.npy') 
+            assert os.path.exists(pm.get_output_path() + 'parse_object_columns_mapping.npy')
             Y = pm.parse_object_columns(Y, True)
             assert_almost_equal(Y.as_matrix(), target_Y.as_matrix())
             Y_nan = pm.parse_object_columns(Y_nan, True)
@@ -97,7 +97,7 @@ class TestFileManagement(unittest.TestCase):
             X = pm.fill_numerical(X)
             assert_almost_equal(X.as_matrix(), target_X.as_matrix())
 
-            
+
             # CONTAINS NAN
             X = pd.DataFrame([1, np.nan, 2], [1, 12, 2])
             n_nan_cols = pm.contains_nan(X)
@@ -112,7 +112,7 @@ class TestFileManagement(unittest.TestCase):
             self.assertEqual(n_nan_cols, 0)
 
 
-            # REMOVE CORRELATED 
+            # REMOVE CORRELATED
             d       = {'col1': [1.1, 3.4, -2.3], 'col2': [3.1, 4.2, 2.9], 'col3': [3.1, 4.2, 3.0]}
             d_final = {'col1': [1.1, 3.4, -2.3], 'col2': [3.1, 4.2, 2.9]}
             X = pd.DataFrame(d)
@@ -134,27 +134,27 @@ class TestFileManagement(unittest.TestCase):
             assert_almost_equal(Y.as_matrix(), target_Y.as_matrix())
 
 
-            # REMOVE LOW VARIANCE 
+            # REMOVE LOW VARIANCE
             d_X = {'col1': [1.1, 1.14, 1.1], 'col2': [3.1, 4.2, 2.9], 'col3': [3.1, 4.2, 3.0]}
             d_X_target = {'col2': [3.1, 4.2, 2.9], 'col3': [3.1, 4.2, 3.0]}
             X = pd.DataFrame(d_X)
             target_X = pd.DataFrame(d_X_target)
 
             d_y        = {'col1': [1.1, -2.3], 'col2': [4.2, 2.9], 'col3': [3.1, -3.0]}
-            d_y_target = {'col2': [4.2, 2.9], 'col3': [3.1, -3.0]} 
+            d_y_target = {'col2': [4.2, 2.9], 'col3': [3.1, -3.0]}
             Y = pd.DataFrame(d_y)
             target_Y = pd.DataFrame(d_y_target)
 
             with self.assertRaises(IOError):
                 pm.rm_low_variance(X, True)
-            
+
             X = pm.rm_low_variance(X, False)
             assert_almost_equal(X.as_matrix(), target_X.as_matrix())
             assert os.path.exists(pm.get_output_path() + 'rm_low_variance_drop_cols.npy')
 
             Y = pm.rm_low_variance(Y, True)
             assert_almost_equal(Y.as_matrix(), target_Y.as_matrix())
-            
+
 
             # GET ALL INTEGER COLMNS (protected func)
             d = {'int_col1': [1, 1], 'float_col': [3.1, 4.2], 'int_col2': [1, np.nan]}

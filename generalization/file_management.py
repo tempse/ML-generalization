@@ -9,7 +9,6 @@ import arff
 import matplotlib
 import numpy as np
 import pandas as pd
-from pandas import HDFStore
 
 from generalization.utils import pandas2arff
 
@@ -31,16 +30,19 @@ def delete_old_sessions(folder, keep_sessions=20):
 
     """
 
-    assert isinstance(folder, str)
-    assert isinstance(keep_sessions, int) or keep_sessions is None
+    if not isinstance(folder, str):
+        raise ValueError('folder attribute is not a string')
 
-    if keep_sessions is not None:
-        assert (keep_sessions > 0), 'variable "keep_sessions" must be > 0'
-    
+    if not isinstance(keep_sessions, int) and keep_sessions is not None:
+        raise ValueError('keep_sessions attribute is not int or None')
+
+    if keep_sessions is not None and keep_sessions <= 0:
+        raise ValueError('variable "keep_sessions" must be > 0')
+
     if keep_sessions is None:
         # skip any cleaning operations
         return
-    
+
     if not os.path.exists(folder):
         raise OSError('path {} does not exist, unable to clean ' \
                       'old session files'.format(folder))
@@ -49,19 +51,19 @@ def delete_old_sessions(folder, keep_sessions=20):
         output_basepath = folder
     else:
         output_basepath = os.path.abspath(folder)
-    
+
     if not output_basepath.endswith('/'):
         output_basepath += '/'
 
     initial_path = os.getcwd()+'/'
-    
+
     # create list of session names, sorted from newest to oldest
     os.chdir(output_basepath)
     files = sorted([f for f in os.listdir(output_basepath) \
                     if f.startswith(session_prefix)],
                    key=os.path.getctime,
                    reverse=True)
-    
+
     if len(files) < keep_sessions:
         os.chdir(initial_path)
         # session number below the limit, nothing else to be done
@@ -75,10 +77,8 @@ def delete_old_sessions(folder, keep_sessions=20):
             if e.errno == e.ENOENT:
                 warnings.warn('folder {} not found, thus not deleted'.format(
                     files[i]))
-                pass
             if e.errno == e.ENOTDIR:
                 os.remove(files[i])
-                pass
 
     os.chdir(initial_path)
 
@@ -108,19 +108,22 @@ class OutputManager:
 
     def __init__(self, output_basepath='output/', keep_sessions=20):
 
-        assert isinstance(output_basepath, str)
-        assert isinstance(keep_sessions, int) or keep_sessions is None
+        if not isinstance(output_basepath, str):
+            raise ValueError('output_basepath attribute is not a string')
+
+        if not isinstance(keep_sessions, int) and keep_sessions is not None:
+            raise ValueError('keep_sessions is not int or None')
 
         if not os.path.isabs(output_basepath):
             output_basepath = os.path.abspath(output_basepath)
-        
+
         if not output_basepath.endswith('/'):
             output_basepath += '/'
 
         self.keep_sessions = keep_sessions
 
         now = datetime.datetime.now()
-            
+
         self.session_dir = output_basepath + session_prefix + \
                            '{}-{}-{}_{}-{}-{}/'.format(
                                now.year,
@@ -129,7 +132,7 @@ class OutputManager:
                                now.hour,
                                now.minute,
                                now.second)
-        
+
         try:
             os.makedirs(self.session_dir)
         except OSError as e:
@@ -153,18 +156,21 @@ class OutputManager:
         Returns:
             The path of the current session folder (incl. a subfolder, if specified).
         """
-        
-        assert isinstance(subfolder, str) or subfolder is None
-        assert os.path.exists(self.session_dir)
-        
+
+        if not isinstance(subfolder, str) and subfolder is not None:
+            raise ValueError('subfolder attribute is not string or None')
+
+        if not os.path.exists(self.session_dir):
+            raise IOError('path {} does not exist'.format(self.session_dir))
+
         if subfolder is not None and \
            not os.path.exists(self.session_dir+'/'+subfolder):
             raise OSError('the folder {} does not exist in {}'.format(
                 subfolder, self.session_dir))
-        
+
         return self.session_dir
 
-            
+
     def save(self, output_object, output_name, folder=None, to_arff=False):
         """Stores the passed object in the current session's output folder.
 
@@ -182,9 +188,14 @@ class OutputManager:
                           '(just re-run the program to fix this)'.format(
                               self.session_dir))
 
-        assert isinstance(output_name, str)
-        assert isinstance(folder, str) or folder is None
-        assert isinstance(to_arff, bool) or to_arff is None
+        if not isinstance(output_name, str):
+            raise ValueError('output_name attribute is not a string')
+
+        if not isinstance(folder, str) and folder is not None:
+            raise ValueError('folder attribute is not string or None')
+
+        if not isinstance(to_arff, bool) and to_arff is not None:
+            raise ValueError('to_arff attribute is not boolean or None')
 
         output_basename = self.session_dir
 
@@ -197,7 +208,7 @@ class OutputManager:
                     raise
 
         output_basename += output_name
-                
+
         if isinstance(output_object, matplotlib.figure.Figure):
             output_object.savefig(output_basename + '.pdf')
             output_object.savefig(output_basename + '.png')
@@ -216,12 +227,10 @@ class OutputManager:
             else:
                 np.save(output_basename + '.npy', output_object.as_matrix(),
                         allow_pickle=True)
-            
+
         else:
             warnings.warn('no methods to save objects of type {} implemented, ' \
                           'using pickle to store the object'.format(
                               type(output_object)))
             with open(output_basename + '.pkl', 'wb') as picklefile:
                 pickle.dump(output_object, picklefile)
-
-
