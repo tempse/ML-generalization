@@ -138,7 +138,7 @@ class PreprocessingManager():
         Returns:
             the parsed feature matrix X
         _________________________________________________________________________
-        
+
         Operations breakdown:
             Parse all object-columns in X to integer
         """
@@ -216,10 +216,10 @@ class PreprocessingManager():
         _________________________________________________________________________
 
         Returns:
-            the feature matrix X with all nan values of 
+            the feature matrix X with all nan values of
             numerical columns filled up
         _________________________________________________________________________
-        
+
         Operations breakdown:
             Fill missing numerical (nan values) values using average
         """
@@ -253,11 +253,11 @@ class PreprocessingManager():
             the feature matrix X with all nan values of
             categorical columns filled up
         _________________________________________________________________________
-        
+
         Operations breakdown:
             Machine learning to fill categorical values in
         """
-        
+
         if not isinstance(X, pd.DataFrame):
             raise TypeError('Feature matrix should be ' \
                             'a pandas dataframe but instead is {}'.format(type(X)))
@@ -291,11 +291,11 @@ class PreprocessingManager():
             the number of colums in the feature matrix that contain
             nan values
         _________________________________________________________________________
-        
+
         Operations breakdown:
             checks if column contrains nan and prints it out
         """
-        
+
         if not isinstance(X, pd.DataFrame):
             raise TypeError('Feature matrix should be ' \
                             'a pandas dataframe but instead is {}'.format(type(X)))
@@ -321,7 +321,7 @@ class PreprocessingManager():
             the feature matrix with columns removed from it
             that have similar entries than another columns
         _________________________________________________________________________
-        
+
         Operations breakdown:
             Check for correlation between columns, and remove duplicate information
 
@@ -329,7 +329,7 @@ class PreprocessingManager():
             get rid of vanishing stdevs in the correlation formula:
                 cor(i,j) = cov(i,j)/[stdev(i)*stdev(j)]
         """
-        
+
         if not isinstance(X, pd.DataFrame):
             raise TypeError('Feature matrix should be ' \
                             'a pandas dataframe but instead is {}'.format(type(X)))
@@ -390,11 +390,11 @@ class PreprocessingManager():
             the feature matrix with columns removed from it
             that have a small variance in its values
         _________________________________________________________________________
-        
+
         Operations breakdown:
             dropping colmns that have a too small variance
         """
-        
+
         if not isinstance(X, pd.DataFrame):
             raise TypeError('Feature matrix should be ' \
                             'a pandas dataframe but instead is {}'.format(type(X)))
@@ -443,7 +443,7 @@ class PreprocessingManager():
         Returns:
             A list of (true) integer-column names
         _________________________________________________________________________
-        
+
         Operations breakdown:
             If a integer column has at least one nan value it is
             automatically percieved as a floating dtype.
@@ -451,7 +451,7 @@ class PreprocessingManager():
             If a column then contrains only ints and nans we append it to the
             output list.
         """
-        
+
         if not isinstance(X, pd.DataFrame):
             raise TypeError('Feature matrix should be ' \
                             'a pandas dataframe but instead is {}'.format(type(X)))
@@ -489,13 +489,13 @@ class PreprocessingManager():
         Returns:
             the feature matrix with its categorical columns filled up
         _________________________________________________________________________
-        
+
         Operations breakdown:
             The nan values in categorical columns are filled up by
             using an ExtraTreesClassifier that is trained on columns
             that do not contain nan values
         """
-        
+
         # Check that all columns are in data frame
         for item in features:
             if item not in list(X.columns):

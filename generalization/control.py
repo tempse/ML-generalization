@@ -37,7 +37,7 @@ def config_file_to_dict(filename):
 
     if not os.path.isfile(filename):
         raise IOError('File {} does not exist.'.format(filename))
-    
+
     parser = fileparser(configparser.ConfigParser())
     parser.optionxform=str # make key parsing case-sensitive
     parser.read(filename)
@@ -52,7 +52,7 @@ def check_data_config_requirements(data_params):
 
     if not isinstance(data_params, dict):
         raise ValueError('Passed argument is not a dictionary')
-    
+
     required_keys = ['data_identifier',
                      'data_path',
                      'data_read_func',

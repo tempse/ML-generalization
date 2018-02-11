@@ -78,13 +78,13 @@ def evaluate_nfold(X, y, model, num_test_samples, scoring='f1_score',
     if num_test_samples == 1:
         y_pred = model.predict(X)
         scores.append((supported_scoring_funcs[scoring])(y, y_pred))
-        
+
     elif bootstrapping:
         for i in range(num_test_samples):
             X_sample, y_sample = resample(X, y, replace=True)
             y_pred = model.predict(X_sample)
             scores.append((supported_scoring_funcs[scoring])(y_sample, y_pred))
-        
+
     else:
         k_fold = KFold(num_test_samples)
         for k, (fold_indices_train, fold_indices_test) in enumerate(k_fold.split(X, y)):
@@ -113,7 +113,7 @@ def performance_difference(scores):
 
     if len(scores) <= 1:
         return 0.0, 0.0
-    
+
     scores_diff = []
 
     for i,j in enumerate(comb_indices):
@@ -121,5 +121,3 @@ def performance_difference(scores):
                                scores[comb_indices[i][1]]))
 
     return np.mean(scores_diff), np.std(scores_diff)
-
-

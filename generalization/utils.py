@@ -62,7 +62,7 @@ class logger(object):
     """
     Writes output both to terminal and to file.
     """
-    
+
     def __init__(self, output_path):
         self.terminal = sys.stdout
 
@@ -89,7 +89,7 @@ def print_class_counts(y, name, **kwargs):
     Prints the number of entries of a passed vector and the size of its contained classes.
     Usage example: "print_class_counts(y_train, 'training', background=0, signal=1)"
     """
-    
+
     print('\nNumber of {} samples: {}'.format(name, y.shape[0]))
 
     class_list = []
@@ -107,10 +107,10 @@ def print_class_counts(y, name, **kwargs):
               'Could not iterate over the passed items. ' \
               '(Maybe a Python version conflict?)')
         print('\n Skip printing class counts.')
-        
+
         return
-        
-        
+
+
     for key, item in class_list:
         print('  Number of {}: {} ({:.2f} percent)'.format(
             key,
@@ -134,7 +134,7 @@ def get_search_results(model):
             - the best estimator
             - the score of the best estimator
     """
-    
+
     if isinstance(model, skopt.searchcv.BayesSearchCV):
         print('\n')
         print('{}\nBayes search summary (used folds: {})\n{}\n'.format(
@@ -173,22 +173,22 @@ def pandas2arff(df,filename,wekaname = "pandasdata",cleanstringdata=False,cleann
     cleannan: replaces all nan values with "?" which is Weka's standard for missing values.
               To suppress this, set this to False
     """
-    
+
     import re
-    
+
     def cleanstring(s):
         if s!="?":
             return re.sub('[^A-Za-z0-9]+', "_", str(s))
         else:
             return "?"
-            
+
     dfcopy = df #all cleaning operations get done on this copy
 
 
     if cleannan:
         dfcopy = dfcopy.fillna(-999999999) #this is so that we can swap this out for "?"
         #this makes sure that certain numerical columns with missing values don't get stuck with "object" type
- 
+
     f = open(filename,"w")
     arffList = []
     arffList.append("@RELATION " + wekaname + "\n")
@@ -231,12 +231,12 @@ def pandas2arff(df,filename,wekaname = "pandasdata",cleanstringdata=False,cleann
 
 def print_info(msg, marker='', cnt=4):
     """Function for simple terminal output formatting"""
-    
+
     if not isinstance(msg, str) or not isinstance(marker, str):
         raise ValueError
     if not isinstance(cnt, int):
         raise ValueError
-    
+
     if marker == '=':
         print('\n{}\n{}{}\n{}'.format('='*cnt, ' '*4, msg, '='*cnt))
     elif marker == '-':

@@ -34,11 +34,11 @@ def load_data(data_params):
 
     # dictionary holding all custom kwargs for the Pandas method
     kwargs_func = {}
-    
+
     for key in data_params.keys():
         if key in valid_args:
             kwargs_func[key] = data_params[key]
-    
+
     data = getattr(pd, read_func)(data_params['data_path'], **kwargs_func)
 
     print('Imported data: {} rows, {} columns'.format(data.shape[0],

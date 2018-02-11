@@ -61,7 +61,7 @@ def plot_performance_diff(*arrays, **options):
             xmax))
 
     sns.set_palette(sns.color_palette("deep", n_colors=int((len(arrays)-1)*0.5)))
-    
+
     fig = plt.figure()
 
     curves = []
