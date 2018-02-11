@@ -12,7 +12,7 @@ from generalization.file_management import OutputManager, delete_old_sessions
 class TestFileManagement(unittest.TestCase):
 
     def test_delete_old_sessions(self):
-        import os, shutil, time
+        import shutil, time, os
         
         with tempfile.TemporaryDirectory() as tmpdir:
             os.chdir(tmpdir)
@@ -56,7 +56,6 @@ class TestFileManagement(unittest.TestCase):
         import numpy as np
         import pandas as pd
         import matplotlib.pyplot as plt
-        import pickle
         
         with tempfile.TemporaryDirectory() as tmpdir:
             os.chdir(tmpdir)

@@ -1,5 +1,3 @@
-import numpy as np
-
 from skopt import BayesSearchCV
 from skopt.space import Real, Categorical, Integer
 

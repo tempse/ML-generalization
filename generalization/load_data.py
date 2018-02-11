@@ -2,7 +2,6 @@ import os
 import sys
 
 import pandas as pd
-from pandas import read_csv
 
 
 def load_data(data_params):

@@ -1,7 +1,5 @@
 from itertools import combinations
 import collections
-import types
-import warnings
 
 import numpy as np
 import pandas as pd

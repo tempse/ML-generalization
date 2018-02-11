@@ -2,13 +2,11 @@ import sys
 import os
 import numpy as np
 import errno
-import arff
 
-from sklearn.naive_bayes import GaussianNB, MultinomialNB
+from sklearn.naive_bayes import GaussianNB
 from sklearn.model_selection import cross_validate
 
 import skopt
-from skopt import BayesSearchCV
 
 def get_optimal_CV_n_folds(X_train, y_train, average_over_n_fits=1):
     """

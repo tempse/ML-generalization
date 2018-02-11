@@ -9,7 +9,6 @@ import arff
 import matplotlib
 import numpy as np
 import pandas as pd
-from pandas import HDFStore
 
 from generalization.utils import pandas2arff
 

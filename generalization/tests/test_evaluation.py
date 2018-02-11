@@ -10,9 +10,8 @@ class TestEvaluation(unittest.TestCase):
     
     @ignore_warnings
     def test_evaluate_nfold(self):
-        from sklearn.naive_bayes import GaussianNB, MultinomialNB
+        from sklearn.naive_bayes import GaussianNB
         from sklearn.model_selection import train_test_split
-        import numpy as np
         import pandas as pd
         
         X, y = make_classification(n_features=5, random_state=1)
