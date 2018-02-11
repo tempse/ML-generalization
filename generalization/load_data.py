@@ -19,7 +19,7 @@ def load_data(data_params):
 
     Returns the data in form of a Pandas dataframe.
     """
-    
+
     if not os.path.exists(data_params['data_path']):
         print('Error when loading the data. File {} is not a regular ' \
               'file.'.format(data_params['data_path']))

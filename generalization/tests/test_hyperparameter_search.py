@@ -9,7 +9,7 @@ class TestHyperparameterSearch(unittest.TestCase):
         from sklearn.naive_bayes import GaussianNB, MultinomialNB
         from sklearn.svm import SVC
         from skopt import BayesSearchCV
-        
+
         model = SVC()
         model = hyperparameter_search(model, 2, 3)
         self.assertTrue(isinstance(model, BayesSearchCV))

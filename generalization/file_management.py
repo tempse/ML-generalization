@@ -32,7 +32,7 @@ def delete_old_sessions(folder, keep_sessions=20):
 
     if not isinstance(folder, str):
         raise ValueError('folder attribute is not a string')
-    
+
     if not isinstance(keep_sessions, int) and keep_sessions is not None:
         raise ValueError('keep_sessions attribute is not int or None')
 

@@ -13,7 +13,7 @@ class TestFileManagement(unittest.TestCase):
 
     def test_delete_old_sessions(self):
         import time, os
-        
+
         with tempfile.TemporaryDirectory() as tmpdir:
             os.chdir(tmpdir)
             num_testfolders = 15

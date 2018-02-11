@@ -79,7 +79,7 @@ class PreprocessingManager():
         Returns:
             the standard scaled feature matrix X
         _________________________________________________________________________
-        
+
         Operations breakdown:
             standard scaling to 0-mean and std-derivation of 1
 

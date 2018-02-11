@@ -34,7 +34,7 @@ def config_file_to_dict(filename):
 
     if not isinstance(filename, str):
         raise ValueError('{} is not a string'.format(filename))
-    
+
     if not os.path.isfile(filename):
         raise IOError('File {} does not exist.'.format(filename))
     

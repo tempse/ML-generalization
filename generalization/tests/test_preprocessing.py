@@ -97,7 +97,7 @@ class TestFileManagement(unittest.TestCase):
             X = pm.fill_numerical(X)
             assert_almost_equal(X.as_matrix(), target_X.as_matrix())
 
-            
+
             # CONTAINS NAN
             X = pd.DataFrame([1, np.nan, 2], [1, 12, 2])
             n_nan_cols = pm.contains_nan(X)

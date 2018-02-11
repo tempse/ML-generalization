@@ -24,7 +24,7 @@ def get_optimal_CV_n_folds(X_train, y_train, average_over_n_fits=1):
             returns the number of folds where the standard deviation
             is minimal regarding a certain metric - here: accuracy
     """
-    
+
     if not isinstance(X_train, np.ndarray):
         raise ValueError('Inappropriate type: {} for the feature matrix X \
                           whereas a numpy array is expected'.format(type(X_train)))
@@ -185,7 +185,7 @@ def pandas2arff(df,filename,wekaname = "pandasdata",cleanstringdata=False,cleann
     dfcopy = df #all cleaning operations get done on this copy
 
 
-    if cleannan==True:
+    if cleannan:
         dfcopy = dfcopy.fillna(-999999999) #this is so that we can swap this out for "?"
         #this makes sure that certain numerical columns with missing values don't get stuck with "object" type
  

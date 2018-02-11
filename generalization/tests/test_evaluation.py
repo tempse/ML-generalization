@@ -7,7 +7,7 @@ from generalization.evaluation import performance_difference, evaluate_nfold
 
 
 class TestEvaluation(unittest.TestCase):
-    
+
     @ignore_warnings
     def test_evaluate_nfold(self):
         from sklearn.naive_bayes import GaussianNB

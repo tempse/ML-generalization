@@ -80,10 +80,10 @@ def main():
     final_results_labels += ['test_{}_diff_std'.format(i) for i in scoring_funcs]
     final_results_labels += ['test_{}_diff_mean_bootstrap'.format(i) for i in scoring_funcs]
     final_results_labels += ['test_{}_diff_std_bootstrap'.format(i) for i in scoring_funcs]
-    
+
     final_results = pd.DataFrame(columns=final_results_labels)
 
-    
+
     # loop over all sections of the data params config file
     for d_cnt,d in enumerate(data_config):
 

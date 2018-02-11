@@ -69,7 +69,7 @@ def evaluate_nfold(X, y, model, num_test_samples, scoring='f1_score',
     if isinstance(y, pd.DataFrame) or isinstance(y, pd.core.series.Series):
         #warnings.warn('Target vector y converted from pandas dataframe to numpy array')
         y = y.as_matrix()
-    
+
     scores = []
 
     if randomize:

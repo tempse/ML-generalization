@@ -56,7 +56,7 @@ def hyperparameter_search(estimator, n_iter, cv_nfolds):
                         , 'degree'          : Integer(1,8)
                         , 'kernel'          : Categorical(['linear', 'poly', 'rbf'])
                         }
-    
+
     elif 'RandomForestClassifier' in class_name:
         search_spaces = { 'n_estimators'    : Integer(10,800)
                         , 'criterion'       : Categorical(['gini', 'entropy'])

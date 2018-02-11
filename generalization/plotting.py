@@ -59,7 +59,7 @@ def plot_performance_diff(*arrays, **options):
     if not isinstance(xmax, int) and xmax is not None:
         raise ValueError('xmax has to be a positive integer, but is {}.'.format(
             xmax))
-    
+
     sns.set_palette(sns.color_palette("deep", n_colors=int((len(arrays)-1)*0.5)))
     
     fig = plt.figure()
@@ -74,7 +74,7 @@ def plot_performance_diff(*arrays, **options):
         curves.append(curve)
 
     if train_difference is not None:
-        for i in range(len(train_difference)):
+        for i,j in enumerate(train_difference):
             plt.plot(1,
                      train_difference[i],
                      marker='*',
