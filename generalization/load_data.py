@@ -13,7 +13,7 @@ def load_data(data_params):
     Required items in data_params dictionary:
     - data_path
     - data_read_func
-    
+
     Optional items in data_params dictionary:
     - all valid keyword arguments for the selected Pandas import method
 

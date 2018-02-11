@@ -4,7 +4,7 @@ from generalization.hyperparameter_search import hyperparameter_search
 
 
 class TestHyperparameterSearch(unittest.TestCase):
-    
+
     def test_hyperparameter_search(self):
         from sklearn.naive_bayes import GaussianNB, MultinomialNB
         from sklearn.svm import SVC

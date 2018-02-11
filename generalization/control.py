@@ -23,7 +23,7 @@ class fileparser(configparser.ConfigParser):
             d[k].pop('__name__', None)
             for j in d[k].keys():
                 d[k][j] = ast.literal_eval(d[k][j])
-        
+
         return d
 
 

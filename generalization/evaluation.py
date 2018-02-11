@@ -61,7 +61,7 @@ def evaluate_nfold(X, y, model, num_test_samples, scoring='f1_score',
     if num_test_samples < 1:
         raise ValueError('num_test_sample must be larger than 1, ' \
                          'but is {}'.format(num_test_samples))
-    
+
     if isinstance(X, pd.DataFrame):
         #warnings.warn('Feature matrix X converted from pandas dataframe to numpy array')
         X = X.as_matrix()
@@ -117,7 +117,7 @@ def performance_difference(scores):
     scores_diff = []
 
     for i,j in enumerate(comb_indices):
-        scores_diff.append(abs(scores[comb_indices[i][0]] - 
+        scores_diff.append(abs(scores[comb_indices[i][0]] -
                                scores[comb_indices[i][1]]))
 
     return np.mean(scores_diff), np.std(scores_diff)

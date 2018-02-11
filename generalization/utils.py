@@ -15,15 +15,16 @@ def get_optimal_CV_n_folds(X_train, y_train, average_over_n_fits=1):
             y_train: a numpy array containing the traget values
     ____________________________________________________________________
 
-    Returns: 
-            the optimal number of CV folds. 
+    Returns:
+            the optimal number of CV folds.
     ____________________________________________________________________
 
-    Operation breakdown: 
-            Fits the data multiple times with a Naive-Bayes model and 
+    Operation breakdown:
+            Fits the data multiple times with a Naive-Bayes model and
             returns the number of folds where the standard deviation
             is minimal regarding a certain metric - here: accuracy
     """
+    
     if not isinstance(X_train, np.ndarray):
         raise ValueError('Inappropriate type: {} for the feature matrix X \
                           whereas a numpy array is expected'.format(type(X_train)))
@@ -35,7 +36,7 @@ def get_optimal_CV_n_folds(X_train, y_train, average_over_n_fits=1):
 
     avg_min_var_nfolds = []
     for n_fits in range(average_over_n_fits):
-        # calculate the best # of folds as an average 
+        # calculate the best # of folds as an average
         for nfolds in range(3,10):
             # fit here the data with model
             scores = cross_validate(model, X_train, y_train,
@@ -52,7 +53,7 @@ def get_optimal_CV_n_folds(X_train, y_train, average_over_n_fits=1):
                 min_var_nfolds = nfolds
             else:
                 pass
-        avg_min_var_nfolds.append(min_var_nfolds) 
+        avg_min_var_nfolds.append(min_var_nfolds)
 
     return int(round(sum(avg_min_var_nfolds) / float(len(avg_min_var_nfolds))))
 
@@ -122,7 +123,7 @@ def get_search_results(model):
     Args:
         model: the BayesSearchCV fitted model
    ___________________________________________________________________
-	
+
     Returns:
 	    a dictionary containing the model parameters
     ___________________________________________________________________
@@ -133,6 +134,7 @@ def get_search_results(model):
             - the best estimator
             - the score of the best estimator
     """
+    
     if isinstance(model, skopt.searchcv.BayesSearchCV):
         print('\n')
         print('{}\nBayes search summary (used folds: {})\n{}\n'.format(
@@ -158,7 +160,7 @@ def get_search_results(model):
                     skopt.searchcv.BayesSearchCV but instead is {}'.format(type(model)))
 
     return model_pars
-    
+
 
 def pandas2arff(df,filename,wekaname = "pandasdata",cleanstringdata=False,cleannan=True):
     """
@@ -166,11 +168,12 @@ def pandas2arff(df,filename,wekaname = "pandasdata",cleanstringdata=False,cleann
     df: dataframe in pandas format
     filename: the filename you want the weka compatible file to be in
     wekaname: the name you want to give to the weka dataset (this will be visible to you when you open it in Weka)
-    cleanstringdata: clean up data which may have spaces and replace with "_", special characters etc which seem to annoy Weka. 
+    cleanstringdata: clean up data which may have spaces and replace with "_", special characters etc which seem to annoy Weka.
                      To suppress this, set this to False
-    cleannan: replaces all nan values with "?" which is Weka's standard for missing values. 
+    cleannan: replaces all nan values with "?" which is Weka's standard for missing values.
               To suppress this, set this to False
     """
+    
     import re
     
     def cleanstring(s):
@@ -181,7 +184,7 @@ def pandas2arff(df,filename,wekaname = "pandasdata",cleanstringdata=False,cleann
             
     dfcopy = df #all cleaning operations get done on this copy
 
-    
+
     if cleannan==True:
         dfcopy = dfcopy.fillna(-999999999) #this is so that we can swap this out for "?"
         #this makes sure that certain numerical columns with missing values don't get stuck with "object" type
@@ -192,20 +195,20 @@ def pandas2arff(df,filename,wekaname = "pandasdata",cleanstringdata=False,cleann
     #look at each column's dtype. If it's an "object", make it "nominal" under Weka for now (can be changed in source for dates.. etc)
     for i in range(df.shape[1]):
         if dfcopy.dtypes[i]=='O' or (df.columns[i] in ["Class","CLASS","class"]):
-            if cleannan==True:
+            if cleannan:
                 dfcopy.iloc[:,i] = dfcopy.iloc[:,i].replace(to_replace=-999999999, value="?")
-            if cleanstringdata==True:
+            if cleanstringdata:
                 dfcopy.iloc[:,i] = dfcopy.iloc[:,i].apply(cleanstring)
             _uniqueNominalVals = [str(_i) for _i in np.unique(dfcopy.iloc[:,i])]
             _uniqueNominalVals = ",".join(_uniqueNominalVals)
             _uniqueNominalVals = _uniqueNominalVals.replace("[","")
             _uniqueNominalVals = _uniqueNominalVals.replace("]","")
-            _uniqueValuesString = " {" + _uniqueNominalVals +"}" 
+            _uniqueValuesString = " {" + _uniqueNominalVals +"}"
             arffList.append("@ATTRIBUTE " + df.columns[i] + _uniqueValuesString + "\n")
         else:
-            arffList.append("@ATTRIBUTE " + df.columns[i] + " real\n") 
+            arffList.append("@ATTRIBUTE " + df.columns[i] + " real\n")
             #even if it is an integer, let's just deal with it as a real number for now
-    arffList.append("@DATA\n")           
+    arffList.append("@DATA\n")
     for i in range(dfcopy.shape[0]):#instances
         _instanceString = ""
         for j in range(df.shape[1]):#features
@@ -216,7 +219,7 @@ def pandas2arff(df,filename,wekaname = "pandasdata",cleanstringdata=False,cleann
                 if j!=dfcopy.shape[1]-1:#if it's not the last feature, add a comma
                     _instanceString+=","
         _instanceString+="\n"
-        if cleannan==True:
+        if cleannan:
             _instanceString = _instanceString.replace("-999999999.0","?") #for numeric missing values
             _instanceString = _instanceString.replace("\"?\"","?") #for categorical missing values
         arffList.append(_instanceString)
@@ -244,4 +247,3 @@ def print_info(msg, marker='', cnt=4):
         print('\n{} {}'.format(':'*cnt, msg))
     else:
         print('{} {}'.format(' '*cnt, msg))
-        

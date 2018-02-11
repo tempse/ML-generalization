@@ -30,7 +30,7 @@ def plot_performance_diff(*arrays, **options):
         raise ValueError('even number of arrays, they have to come in ' \
                          'splits + n*(mean-std pairs)')
 
-    if not all([isinstance(arrays[i], np.ndarray) for i in range(len(arrays))]):
+    if not all([isinstance(arrays[i], np.ndarray) for i,j in enumerate(arrays)]):
         raise ValueError('not all passed arrays are numpy arrays')
 
     labels = options.pop('labels', None)

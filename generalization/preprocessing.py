@@ -47,9 +47,9 @@ def parse_target_labels(y, pos_label, neg_label):
 
     y = y.replace(pos_label, 1)
     y = y.replace(neg_label, 0)
-    
+
     return y
-    
+
 
 class PreprocessingManager():
 
@@ -99,10 +99,10 @@ class PreprocessingManager():
             Xfeats_var = scaler.var_
 
             self.param_path['standard_scale'] = self.path + 'standard_scale_attributes.npy'
-            np.save(self.param_path['standard_scale'], 
+            np.save(self.param_path['standard_scale'],
                     np.array([Xfeats_mean, Xfeats_scale, Xfeats_var]))
 
-        else: 
+        else:
             try:
                 filename = self.param_path['standard_scale']
                 if not os.path.isfile(filename):
@@ -140,7 +140,7 @@ class PreprocessingManager():
         _________________________________________________________________________
         
         Operations breakdown:
-            Parse all object-columns in X to integer 
+            Parse all object-columns in X to integer
         """
         if not isinstance(X, pd.DataFrame):
             raise TypeError('Feature matrix should be ' \
@@ -156,7 +156,7 @@ class PreprocessingManager():
 
             print('Parsing the following features: {}'.format(fix_list))
             dic_list = []
-            
+
             for col in fix_list:
                 X[col] = X[col].astype('category')
                 # we have to save the mapping to the new values
@@ -167,7 +167,7 @@ class PreprocessingManager():
                 rev_dic = { v:k for k,v in dic.items() }
                 dic_list.append(rev_dic)
                 X[col] = X[col].cat.codes
-                
+
             # we save the column and the corresponding mapping
             zipList = zip(fix_list, dic_list)
             self.param_path['parse_object_columns'] = self.path + 'parse_object_columns_mapping.npy'
@@ -181,11 +181,11 @@ class PreprocessingManager():
             try:
                 filename = self.param_path['parse_object_columns']
                 if not os.path.isfile(filename):
-                    raise IOError('File {} does not exist'.format(scaler_attributes_filename))
+                    raise IOError('File {} does not exist'.format(filename))
             except KeyError:
                 raise IOError('Parameters have not yet been fitted, ' \
                               'so attributes cannot be loaded!')
-                    
+
             print('Picking up the parser map from a file to parse the test data...\n')
             # [()] returns a zip-list instead of a it being wrapped in numpy array
             parse_map = np.load(filename)[()]
@@ -196,13 +196,13 @@ class PreprocessingManager():
                     if X[col].dtype == np.dtype('O'):
                         warnings.warn('Training data has unknown object values \
                                 in feature {}. Parsing them to minus signes!'.format(col))
-                        unkn_list = X[col][X[col].apply(lambda x: type(x)!=int and \
+                        unkn_list = X[col][X[col].apply(lambda x: not isinstance(x,int) and \
                                                         (not pd.isnull(x)))].tolist()
                         unkn_dic = {unkn_list[idx]:-idx-2 for idx in range(len(unkn_list))}
                         X[col] = list(map(unkn_dic.get, X[col].tolist(), X[col].tolist()))
-                        if X[col].dtype == np.dtype('O'): 
+                        if X[col].dtype == np.dtype('O'):
                             raise TypeError('Training data contains ' \
-                                            'unknown class in column: {}'.format(col))             
+                                            'unknown class in column: {}'.format(col))
         return X
 
 
@@ -237,7 +237,7 @@ class PreprocessingManager():
             X[col] = X[col].fillna(Mean)
 
         return X
-     
+
 
 
     def fill_categorical(self, X, *args):
@@ -250,13 +250,14 @@ class PreprocessingManager():
         _________________________________________________________________________
 
         Returns:
-            the feature matrix X with all nan values of 
+            the feature matrix X with all nan values of
             categorical columns filled up
         _________________________________________________________________________
         
         Operations breakdown:
             Machine learning to fill categorical values in
         """
+        
         if not isinstance(X, pd.DataFrame):
             raise TypeError('Feature matrix should be ' \
                             'a pandas dataframe but instead is {}'.format(type(X)))
@@ -272,14 +273,14 @@ class PreprocessingManager():
             if item in X.columns:
                 if sum(X[item].isnull()) > 0:
                     labels_list.append(item)
-      
+
         for item in labels_list:
             feature_list = [col for col in X.columns if col not in labels_list]
             X = self.__learn_vals(X,item,feature_list)
 
         return X
 
-        
+
     def contains_nan(self, X, *args):
         """
         Args:
@@ -294,6 +295,7 @@ class PreprocessingManager():
         Operations breakdown:
             checks if column contrains nan and prints it out
         """
+        
         if not isinstance(X, pd.DataFrame):
             raise TypeError('Feature matrix should be ' \
                             'a pandas dataframe but instead is {}'.format(type(X)))
@@ -327,6 +329,7 @@ class PreprocessingManager():
             get rid of vanishing stdevs in the correlation formula:
                 cor(i,j) = cov(i,j)/[stdev(i)*stdev(j)]
         """
+        
         if not isinstance(X, pd.DataFrame):
             raise TypeError('Feature matrix should be ' \
                             'a pandas dataframe but instead is {}'.format(type(X)))
@@ -351,10 +354,10 @@ class PreprocessingManager():
             X.drop(drop_list,axis = 1,inplace = True)
             print('saving dropped columns...')
             self.param_path['rm_correlated'] = self.path + 'rm_correlated_dropped_cols.npy'
-            drop_list.extend(drop_list_zero_var) 
+            drop_list.extend(drop_list_zero_var)
             drop_list = list(set(drop_list))
             np.save(self.param_path['rm_correlated'], drop_list)
-            
+
         else:
             try:
                 filename = self.param_path['rm_correlated']
@@ -370,7 +373,7 @@ class PreprocessingManager():
                 for element in drop_list:
                     if(element in X):
                         X.drop(drop_list,axis = 1,inplace = True)
-     
+
         return X
 
 
@@ -391,6 +394,7 @@ class PreprocessingManager():
         Operations breakdown:
             dropping colmns that have a too small variance
         """
+        
         if not isinstance(X, pd.DataFrame):
             raise TypeError('Feature matrix should be ' \
                             'a pandas dataframe but instead is {}'.format(type(X)))
@@ -425,9 +429,9 @@ class PreprocessingManager():
                 for element in drop_list:
                     if(element in X):
                         X.drop(drop_list,axis = 1,inplace = True)
-     
+
         return X
-       
+
 
 
     def _get_true_integer_columns(self, X):
@@ -442,17 +446,18 @@ class PreprocessingManager():
         
         Operations breakdown:
             If a integer column has at least one nan value it is
-            automatically percieved as a floating dtype. 
+            automatically percieved as a floating dtype.
             We iterate trough the column and check each individual element.
             If a column then contrains only ints and nans we append it to the
             output list.
         """
+        
         if not isinstance(X, pd.DataFrame):
             raise TypeError('Feature matrix should be ' \
                             'a pandas dataframe but instead is {}'.format(type(X)))
 
         int_col_list   = [col for col in X.columns if X[col].dtype == np.dtype('int')]
-        float_col_list = [col for col in X.columns if X[col].dtype == np.dtype('float')] 
+        float_col_list = [col for col in X.columns if X[col].dtype == np.dtype('float')]
         for col in float_col_list:
             if col in int_col_list:
                 continue
@@ -463,7 +468,7 @@ class PreprocessingManager():
                     count += 1
                 if val.is_integer():
                     count += 1
-            # after looping through column we check if the lenght 
+            # after looping through column we check if the lenght
             # and number of ints+nans are the same
             if count == len(X[col]):
                 int_col_list.append(col)
@@ -486,10 +491,11 @@ class PreprocessingManager():
         _________________________________________________________________________
         
         Operations breakdown:
-            The nan values in categorical columns are filled up by 
+            The nan values in categorical columns are filled up by
             using an ExtraTreesClassifier that is trained on columns
             that do not contain nan values
         """
+        
         # Check that all columns are in data frame
         for item in features:
             if item not in list(X.columns):
@@ -497,15 +503,15 @@ class PreprocessingManager():
 
         if label not in list(X.columns) or sum(X[label].isnull())==0:
             return X
-      
+
         print('Filling in {} values...'.format(label))
-        et = ExtraTreesClassifier(n_estimators=100, 
-                                  max_depth=None, 
-                                  min_samples_split=2, 
+        et = ExtraTreesClassifier(n_estimators=100,
+                                  max_depth=None,
+                                  min_samples_split=2,
                                   random_state=0,
                                   verbose=True,
                                   n_jobs=-1)
-     
+
         # the labels ought not contain NaNs!
         labels_train = X[label][X[label].isnull() == 0].values
 
@@ -515,7 +521,7 @@ class PreprocessingManager():
         et.fit(features_train,labels_train)
         labels_test = pd.Series(et.predict(features_test),index = X.index[X[label].isnull()])
         new_col = pd.concat([ X[label][X[label].isnull()==0] , labels_test] )
-      
+
         X = X.combine_first( pd.DataFrame({label:new_col}) )
 
         return X

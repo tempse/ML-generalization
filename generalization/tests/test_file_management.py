@@ -12,7 +12,7 @@ from generalization.file_management import OutputManager, delete_old_sessions
 class TestFileManagement(unittest.TestCase):
 
     def test_delete_old_sessions(self):
-        import shutil, time, os
+        import time, os
         
         with tempfile.TemporaryDirectory() as tmpdir:
             os.chdir(tmpdir)
