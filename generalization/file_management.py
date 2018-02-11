@@ -78,10 +78,8 @@ def delete_old_sessions(folder, keep_sessions=20):
             if e.errno == e.ENOENT:
                 warnings.warn('folder {} not found, thus not deleted'.format(
                     files[i]))
-                pass
             if e.errno == e.ENOTDIR:
                 os.remove(files[i])
-                pass
 
     os.chdir(initial_path)
 

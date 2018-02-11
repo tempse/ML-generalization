@@ -103,7 +103,7 @@ def print_class_counts(y, name, **kwargs):
 
     try:
         class_list = list(kwargs.items())
-    except:
+    except Exception:
         print('Error in function print_class_counts: ' \
               'Could not iterate over the passed items. ' \
               '(Maybe a Python version conflict?)')

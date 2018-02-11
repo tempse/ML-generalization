@@ -241,7 +241,6 @@ def main():
                             scoring_func)] = -1
                         current_data_results['test_{}_diff_std_bootstrap'.format(
                             scoring_func)] = -1
-                        pass
                         
                 print_info('Model score differences (mean, std) for {} ' \
                            'test sample folds: {:.5f}, {:.5f}'.format(
