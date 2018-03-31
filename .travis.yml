@@ -8,7 +8,8 @@ install:
   - pip install -r requirements.txt
 
 script:
-  - python -m unittest discover generalization/tests/
+  - python -m unittest discover tests/
+  - codecov
 
 after_success:
   - 'bash < (curl -s https://codecov.io/bash)'

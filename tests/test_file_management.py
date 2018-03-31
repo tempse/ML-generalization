@@ -4,9 +4,8 @@ import tempfile
 import matplotlib
 matplotlib.use('Agg')
 
-from utils import ignore_warnings
-
 from generalization.file_management import OutputManager, delete_old_sessions
+from generalization.utils import ignore_warnings
 
 
 class TestFileManagement(unittest.TestCase):

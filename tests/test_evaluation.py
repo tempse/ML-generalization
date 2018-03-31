@@ -2,8 +2,8 @@ import unittest
 
 from sklearn.datasets import make_classification
 
-from utils import ignore_warnings
 from generalization.evaluation import performance_difference, evaluate_nfold
+from generalization.utils import ignore_warnings
 
 
 class TestEvaluation(unittest.TestCase):
