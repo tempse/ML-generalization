@@ -1,3 +1,4 @@
+import sys
 import unittest
 
 from generalization.hyperparameter_search import hyperparameter_search
@@ -5,6 +6,11 @@ from generalization.hyperparameter_search import hyperparameter_search
 
 class TestHyperparameterSearch(unittest.TestCase):
 
+    def setUp(self):
+        if not 'matplotlib' in sys.modules:
+            import matplotlib
+            matplotlib.set('Agg')
+            
     def test_hyperparameter_search(self):
         from sklearn.naive_bayes import GaussianNB, MultinomialNB
         from sklearn.svm import SVC

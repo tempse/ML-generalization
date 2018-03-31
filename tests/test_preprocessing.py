@@ -1,3 +1,4 @@
+import sys
 import unittest
 import tempfile
 
@@ -7,6 +8,11 @@ from generalization.preprocessing import PreprocessingManager
 
 class TestFileManagement(unittest.TestCase):
 
+    def setUp(self):
+        if not 'matplotlib' in sys.modules:
+            import matplotlib
+            matplotlib.set('Agg')
+            
     def test_parse_target_labels(self):
         import numpy as np
         import pandas as pd

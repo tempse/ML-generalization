@@ -1,8 +1,6 @@
+import sys
 import unittest
 import tempfile
-
-import matplotlib
-matplotlib.use('Agg')
 
 from generalization.file_management import OutputManager, delete_old_sessions
 from generalization.utils import ignore_warnings
@@ -10,6 +8,11 @@ from generalization.utils import ignore_warnings
 
 class TestFileManagement(unittest.TestCase):
 
+    def setUp(self):
+        if not 'matplotlib' in sys.modules:
+            import matplotlib
+            matplotlib.set('Agg')
+            
     def test_delete_old_sessions(self):
         import time, os
 

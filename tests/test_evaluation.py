@@ -1,3 +1,4 @@
+import sys
 import unittest
 
 from sklearn.datasets import make_classification
@@ -8,6 +9,11 @@ from generalization.utils import ignore_warnings
 
 class TestEvaluation(unittest.TestCase):
 
+    def setUp(self):
+        if not 'matplotlib' in sys.modules:
+            import matplotlib
+            matplotlib.set('Agg')
+    
     @ignore_warnings
     def test_evaluate_nfold(self):
         from sklearn.naive_bayes import GaussianNB

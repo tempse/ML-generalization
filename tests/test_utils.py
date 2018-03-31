@@ -1,3 +1,4 @@
+import sys
 import unittest
 
 from sklearn.datasets import make_classification
@@ -7,6 +8,11 @@ from generalization.utils import get_optimal_CV_n_folds
 
 class TestUtils(unittest.TestCase):
 
+    def setUp(self):
+        if not 'matplotlib' in sys.modules:
+            import matplotlib
+            matplotlib.set('Agg')
+            
     def test_get_optimal_CV_nfolds(self):
         X, y = make_classification(random_state=3)
         nfolds = get_optimal_CV_n_folds(X, y)
