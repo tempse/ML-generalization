@@ -14,7 +14,7 @@ class TestUtils(unittest.TestCase):
                   '(Current class: {})'.format(self.__class__.__name__))
             import matplotlib
             matplotlib.use('Agg')
-            
+
     def test_get_optimal_CV_nfolds(self):
         X, y = make_classification(random_state=3)
         nfolds = get_optimal_CV_n_folds(X, y)

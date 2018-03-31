@@ -15,7 +15,7 @@ class TestEvaluation(unittest.TestCase):
                   '(Current class: {})'.format(self.__class__.__name__))
             import matplotlib
             matplotlib.use('Agg')
-    
+
     @ignore_warnings
     def test_evaluate_nfold(self):
         from sklearn.naive_bayes import GaussianNB

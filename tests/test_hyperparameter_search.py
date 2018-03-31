@@ -12,7 +12,7 @@ class TestHyperparameterSearch(unittest.TestCase):
                   '(Current class: {})'.format(self.__class__.__name__))
             import matplotlib
             matplotlib.use('Agg')
-            
+
     def test_hyperparameter_search(self):
         from sklearn.naive_bayes import GaussianNB, MultinomialNB
         from sklearn.svm import SVC

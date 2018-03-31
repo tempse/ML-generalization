@@ -14,7 +14,7 @@ class TestFileManagement(unittest.TestCase):
                   '(Current class: {})'.format(self.__class__.__name__))
             import matplotlib
             matplotlib.use('Agg')
-            
+
     def test_parse_target_labels(self):
         import numpy as np
         import pandas as pd

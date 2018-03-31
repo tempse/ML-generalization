@@ -12,7 +12,7 @@ class TestPlotting(unittest.TestCase):
                   '(Current class: {})'.format(self.__class__.__name__))
             import matplotlib
             matplotlib.use('Agg')
-            
+
     def test_plot_performance_diff(self):
         import numpy as np
         import matplotlib
