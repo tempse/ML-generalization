@@ -11,6 +11,8 @@ class TestEvaluation(unittest.TestCase):
 
     def setUp(self):
         if os.environ.get('DISPLAY') == '':
+            print('No display name found. Using matplotlib Agg backend. ' \
+                  '(Current class: {})'.format(self.__class__.__name__))
             import matplotlib
             matplotlib.use('Agg')
     
