@@ -1,3 +1,4 @@
+import os
 import unittest
 import tempfile
 
@@ -6,6 +7,13 @@ from generalization.preprocessing import PreprocessingManager
 
 
 class TestFileManagement(unittest.TestCase):
+
+    def setUp(self):
+        if os.environ.get('DISPLAY') == '':
+            print('No display name found. Using matplotlib Agg backend. ' \
+                  '(Current class: {})'.format(self.__class__.__name__))
+            import matplotlib
+            matplotlib.use('Agg')
 
     def test_parse_target_labels(self):
         import numpy as np
@@ -36,7 +44,6 @@ class TestFileManagement(unittest.TestCase):
 
 
     def test_PreprocessingManager(self):
-        import os
         import numpy as np
         from numpy.testing import assert_almost_equal
         import pandas as pd

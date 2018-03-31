@@ -1,9 +1,17 @@
+import os
 import unittest
 
 from generalization.plotting import plot_performance_diff
 
 
 class TestPlotting(unittest.TestCase):
+
+    def setUp(self):
+        if os.environ.get('DISPLAY') == '':
+            print('No display name found. Using matplotlib Agg backend. ' \
+                  '(Current class: {})'.format(self.__class__.__name__))
+            import matplotlib
+            matplotlib.use('Agg')
 
     def test_plot_performance_diff(self):
         import numpy as np

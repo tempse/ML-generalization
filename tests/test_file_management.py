@@ -1,18 +1,22 @@
+import os
 import unittest
 import tempfile
 
-import matplotlib
-matplotlib.use('Agg')
-
-from utils import ignore_warnings
-
 from generalization.file_management import OutputManager, delete_old_sessions
+from generalization.utils import ignore_warnings
 
 
 class TestFileManagement(unittest.TestCase):
 
+    def setUp(self):
+        if os.environ.get('DISPLAY') == '':
+            print('No display name found. Using matplotlib Agg backend. ' \
+                  '(Current class: {})'.format(self.__class__.__name__))
+            import matplotlib
+            matplotlib.use('Agg')
+
     def test_delete_old_sessions(self):
-        import time, os
+        import time
 
         with tempfile.TemporaryDirectory() as tmpdir:
             os.chdir(tmpdir)
@@ -52,7 +56,6 @@ class TestFileManagement(unittest.TestCase):
 
     @ignore_warnings
     def test_OutputManager(self):
-        import os
         import numpy as np
         import pandas as pd
         import matplotlib.pyplot as plt

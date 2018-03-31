@@ -15,7 +15,7 @@ def import_requires(fname='requirements.txt'):
 
 setup(
     name = "generalization",
-    version = "0.1.0",
+    version = "0.1.1",
     author = "Mallinger, Ratzenboeck, Templ",
     author_email = "sebastian.templ@oeaw.ac.at",
     description = ("A machine learning framework for classifier " \

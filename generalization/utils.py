@@ -2,11 +2,21 @@ import sys
 import os
 import numpy as np
 import errno
+import warnings
 
 from sklearn.naive_bayes import GaussianNB
 from sklearn.model_selection import cross_validate
 
 import skopt
+
+
+def ignore_warnings(func):
+    def run_func(self, *args, **kwargs):
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore")
+            func(self, *args, **kwargs)
+    return run_func
+
 
 def get_optimal_CV_n_folds(X_train, y_train, average_over_n_fits=1):
     """

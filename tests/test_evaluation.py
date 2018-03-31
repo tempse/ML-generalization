@@ -1,12 +1,20 @@
+import os
 import unittest
 
 from sklearn.datasets import make_classification
 
-from utils import ignore_warnings
 from generalization.evaluation import performance_difference, evaluate_nfold
+from generalization.utils import ignore_warnings
 
 
 class TestEvaluation(unittest.TestCase):
+
+    def setUp(self):
+        if os.environ.get('DISPLAY') == '':
+            print('No display name found. Using matplotlib Agg backend. ' \
+                  '(Current class: {})'.format(self.__class__.__name__))
+            import matplotlib
+            matplotlib.use('Agg')
 
     @ignore_warnings
     def test_evaluate_nfold(self):

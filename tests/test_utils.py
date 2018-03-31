@@ -1,3 +1,4 @@
+import os
 import unittest
 
 from sklearn.datasets import make_classification
@@ -6,6 +7,13 @@ from generalization.utils import get_optimal_CV_n_folds
 
 
 class TestUtils(unittest.TestCase):
+
+    def setUp(self):
+        if os.environ.get('DISPLAY') == '':
+            print('No display name found. Using matplotlib Agg backend. ' \
+                  '(Current class: {})'.format(self.__class__.__name__))
+            import matplotlib
+            matplotlib.use('Agg')
 
     def test_get_optimal_CV_nfolds(self):
         X, y = make_classification(random_state=3)
