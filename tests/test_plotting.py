@@ -1,4 +1,4 @@
-import sys
+import os
 import unittest
 
 from generalization.plotting import plot_performance_diff
@@ -7,9 +7,9 @@ from generalization.plotting import plot_performance_diff
 class TestPlotting(unittest.TestCase):
 
     def setUp(self):
-        if not 'matplotlib' in sys.modules:
+        if os.environ.get('DISPLAY') == '':
             import matplotlib
-            matplotlib.set('Agg')
+            matplotlib.use('Agg')
             
     def test_plot_performance_diff(self):
         import numpy as np

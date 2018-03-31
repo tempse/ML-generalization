@@ -1,4 +1,4 @@
-import sys
+import os
 import unittest
 import tempfile
 
@@ -9,9 +9,9 @@ from generalization.utils import ignore_warnings
 class TestFileManagement(unittest.TestCase):
 
     def setUp(self):
-        if not 'matplotlib' in sys.modules:
+        if os.environ.get('DISPLAY') == '':
             import matplotlib
-            matplotlib.set('Agg')
+            matplotlib.use('Agg')
             
     def test_delete_old_sessions(self):
         import time, os
