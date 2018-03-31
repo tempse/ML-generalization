@@ -16,7 +16,7 @@ class TestFileManagement(unittest.TestCase):
             matplotlib.use('Agg')
 
     def test_delete_old_sessions(self):
-        import time, os
+        import time
 
         with tempfile.TemporaryDirectory() as tmpdir:
             os.chdir(tmpdir)
@@ -56,7 +56,6 @@ class TestFileManagement(unittest.TestCase):
 
     @ignore_warnings
     def test_OutputManager(self):
-        import os
         import numpy as np
         import pandas as pd
         import matplotlib.pyplot as plt
