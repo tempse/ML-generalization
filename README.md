@@ -34,7 +34,7 @@ The software has been developed using Ubuntu 16.04. With the provided setup scri
 
 ## Running the tests
 
-To run the automated tests, execute `python -m unittest discover generalization/tests/`.
+To run the automated tests, execute `python -m unittest discover`.
 
 ## Run and control the software
 
