@@ -16,6 +16,7 @@ Welcome to ML-generalization's documentation!
    tests
    usage
    uninstallation
+   history
 
 
 Indices and tables
