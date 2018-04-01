@@ -8,6 +8,8 @@
 [![Updates](https://pyup.io/repos/github/tempse/ML-generalization/shield.svg)](https://pyup.io/repos/github/tempse/ML-generalization/) [![Python 3](https://pyup.io/repos/github/tempse/ML-generalization/python-3-shield.svg)](https://pyup.io/repos/github/tempse/ML-generalization/) [![Requirements Status](https://requires.io/github/tempse/ML-generalization/requirements.svg?branch=master)](https://requires.io/github/tempse/ML-generalization/requirements/?branch=master)
 
 > This framework has been developed in the course of the Machine Learning lecture 184.702 at TU Wien.
+
+Documentation: [http://ml-generalization.readthedocs.io/en/latest/](ml-generalization.readthedocs.io)
         
 ## Installation
 
@@ -40,7 +42,7 @@ To run the automated tests, execute `python -m unittest discover`.
 
 ## Run and control the software
 
-Look at [these instructions](https://github.com/tempse/ML-generalization/wiki), for the time being.
+Take a look at [the documentation](http://ml-generalization.readthedocs.io/en/latest/) for detailed information.
 
 ## Uninstall the software
 
