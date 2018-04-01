@@ -1,0 +1,10 @@
+site_name: ML-generalization
+
+pages:
+    - Home: index.md
+    - Installation: installation.md
+    - Running the tests: tests.md
+    - Usage: usage.md
+    - Uninstallation: uninstallation.md
+
+theme: readthedocs
