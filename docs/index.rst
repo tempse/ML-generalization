@@ -9,7 +9,7 @@ Welcome to ML-generalization's documentation!
 *This framework has been developed in the course of the Machine Learning lecture 184.702 at TU Wien.*
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
    :caption: Contents:
 
    installation
