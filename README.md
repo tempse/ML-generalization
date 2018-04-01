@@ -1,5 +1,5 @@
 # A Machine Learning Framework for Classifier Generalization Studies
-![](https://img.shields.io/badge/version-0.1.1-blue.svg) ![](https://img.shields.io/badge/python-3.5-blue.svg)
+![](https://img.shields.io/badge/version-0.1.2-blue.svg) ![](https://img.shields.io/badge/python-3.5-blue.svg)
 
 [![Build Status](https://travis-ci.org/tempse/ML-generalization.svg?branch=master)](https://travis-ci.org/tempse/ML-generalization) [![Documentation Status](https://readthedocs.org/projects/ml-generalization/badge/?version=latest)](http://ml-generalization.readthedocs.io/en/latest/?badge=latest) [![codecov](https://codecov.io/gh/tempse/ML-generalization/branch/master/graph/badge.svg)](https://codecov.io/gh/tempse/ML-generalization)
 
