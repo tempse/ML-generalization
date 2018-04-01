@@ -10,7 +10,6 @@ Version history
 - code quality improvements
 - switch to pytest for travis-CI
 - minor bugfixes
-- code quality improvements
 
 
 0.1.1 (2018-03-31)
