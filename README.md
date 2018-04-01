@@ -9,7 +9,7 @@
 
 > This framework has been developed in the course of the Machine Learning lecture 184.702 at TU Wien.
 
-Documentation: [http://ml-generalization.readthedocs.io/en/latest/](ml-generalization.readthedocs.io)
+Documentation: [ml-generalization.readthedocs.io](http://ml-generalization.readthedocs.io/en/latest/)
         
 ## Installation
 
