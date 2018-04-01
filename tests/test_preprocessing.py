@@ -49,6 +49,7 @@ class TestFileManagement(unittest.TestCase):
         import pandas as pd
 
         with tempfile.TemporaryDirectory() as tmpdir:
+            saved_path = os.getcwd()
             os.chdir(tmpdir)
             pm = PreprocessingManager(tmpdir)
 
@@ -170,6 +171,8 @@ class TestFileManagement(unittest.TestCase):
 
             int_col_list = pm._get_true_integer_columns(X)
             self.assertEqual(int_col_list, target_list)
+
+            os.chdir(saved_path)
 
 
 if __name__ == '__main__':

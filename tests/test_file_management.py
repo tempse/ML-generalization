@@ -19,6 +19,7 @@ class TestFileManagement(unittest.TestCase):
         import time
 
         with tempfile.TemporaryDirectory() as tmpdir:
+            saved_path = os.getcwd()
             os.chdir(tmpdir)
             num_testfolders = 15
             num_keep_folders = 3
@@ -53,6 +54,8 @@ class TestFileManagement(unittest.TestCase):
             with self.assertRaises(OSError):
                 delete_old_sessions('no_chance_this_path_exists')
 
+            os.chdir(saved_path)
+
 
     @ignore_warnings
     def test_OutputManager(self):
@@ -61,6 +64,7 @@ class TestFileManagement(unittest.TestCase):
         import matplotlib.pyplot as plt
 
         with tempfile.TemporaryDirectory() as tmpdir:
+            saved_path = os.getcwd()
             os.chdir(tmpdir)
             om = OutputManager('output/')
 
@@ -106,6 +110,8 @@ class TestFileManagement(unittest.TestCase):
             assert isinstance(om.get_session_folder(), str)
             with self.assertRaises(OSError):
                 om.get_session_folder('notAnActualSubfolder')
+
+            os.chdir(saved_path)
 
 
 
