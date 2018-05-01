@@ -15,6 +15,9 @@ jobs:
       # documented at https://circleci.com/docs/2.0/circleci-images/
       # - image: circleci/postgres:9.4
 
+    environment:
+      TEST_REPORTS: /tmp/test-reports
+
     working_directory: ~/ML-generalization
 
     steps:
@@ -26,10 +29,11 @@ jobs:
           - v1-dependencies-{{ checksum "requirements.txt" }}
           # fallback to using the latest cache if no exact match is found
           - v1-dependencies-
-
+    
       - run:
           name: install dependencies
           command: |
+            mkdir -p ${TEST_REPORTS}
             python3 -m venv venv
             . venv/bin/activate
             pip install numpy
@@ -49,11 +53,12 @@ jobs:
           name: run tests
           command: |
             . venv/bin/activate
-            pytest -v --cov=generalization
+            pytest -v --cov-report xml --cov=generalization
+            cp -v coverage.xml ${TEST_REPORTS}
 
       - store_artifacts:
-          path: test-reports
-          destination: test-reports
+          path: /tmp/artifacts
+          destination: build
 
       - store_test_results:
-          path: test-results
+          path: /tmp/test-reports
