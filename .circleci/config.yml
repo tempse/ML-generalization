@@ -15,7 +15,7 @@ jobs:
       # documented at https://circleci.com/docs/2.0/circleci-images/
       # - image: circleci/postgres:9.4
 
-    working_directory: ~/repo
+    working_directory: ~/ML-generalization
 
     steps:
       - checkout
@@ -54,3 +54,6 @@ jobs:
       - store_artifacts:
           path: test-reports
           destination: test-reports
+
+      - store_test_results:
+          path: test-results
