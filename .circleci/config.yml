@@ -34,15 +34,18 @@ jobs:
           name: install dependencies
           command: |
             mkdir -p ${TEST_REPORTS}
-            python3 -m venv venv
-            . venv/bin/activate
-            pip install numpy
-            pip install -r requirements.txt
+            pip install --upgrade pip
+            pip install pipenv
+            pipenv install --system --dev
+            #python3 -m venv venv
+            #. venv/bin/activate
+            #pip install numpy
+            #pip install -r requirements.txt
 
-      - save_cache:
-          paths:
-            - ./venv
-          key: v1-dependencies-{{ checksum "requirements.txt" }}
+      #- save_cache:
+      #    paths:
+      #      - ./venv
+      #    key: v1-dependencies-{{ checksum "requirements.txt" }}
 
       # run tests!
       # this example uses Django's built-in test-runner
@@ -53,7 +56,7 @@ jobs:
           name: run tests
           command: |
             . venv/bin/activate
-            pytest -v --cov-report xml --cov=generalization
+            pipenv run pytest -v --cov-report xml --cov=generalization
             cp -v coverage.xml ${TEST_REPORTS}
 
       - store_artifacts:

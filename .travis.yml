@@ -6,14 +6,15 @@ python:
   - "3.5"
 
 install:
-  - pip install numpy
-  - pip install -r requirements.txt
+  - pip install --upgrade pip
+  - pip install pipenv
+  - pipenv install --dev
 
 script:
-  - pytest -v --cov=generalization
+  - pipenv run pytest -v --cov=generalization
 #  - coverage run tests/test_all.py
 #  - python -m unittest discover tests/
 
 after_success:
-   - codecov
+   - pipenv run codecov
 #  - 'bash < (curl -s https://codecov.io/bash)'
