@@ -1,0 +1,23 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[dev-packages]
+pytest = "*"
+codecov = "*"
+coverage = "*"
+pytest-cov = "*"
+
+[packages]
+numpy = "*"
+pandas = "==0.22.0"
+sklearn = "*"
+liac-arff = "*"
+matplotlib = "==2.2.0"
+scikit-learn = "*"
+scikit-optimize = "*"
+seaborn = "*"
+
+[requires]
+python_version = "3.5"

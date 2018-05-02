@@ -13,41 +13,74 @@ Documentation: [ml-generalization.readthedocs.io](http://ml-generalization.readt
         
 ## Installation
 
-The software has been developed using Ubuntu 16.04. With the provided setup script, it should however be deployable to other platforms as well.
+> The software has been developed using Ubuntu 16.04.
 
-1) Install a virtual environment with Python 3 and activate it.
-    > On Ubuntu-based systems, this can be done via
-    >
-    >`virtualenv -p python3 <myenv>`
-    >     
-    >(where `<myenv>` is the name of the environment) and
-    >
-    >`source <myenv>/bin/activate`
-1) Install the framework and all its dependencies (numpy has to be installed first explicitly):
+### Requirements
+
+Make sure to install these requirements first:
+```
+sudo apt install python-pip python-dev build-essential
+sudo pip install --upgrade pip
+sudo pip install --upgrade virtualenv
+pip install pipenv
+```
+
+### Download the software:
+
+Clone this repository by executing
+```
+git clone https://github.com/tempse/ML-generalization.git
+```
+
     
-    ```
-    pip install numpy
-    python setup.py install
-    ```
+### Install dependencies:
 
-    Alternatively, one can run
-    ```
-    pip install numpy
-    pip install -r requirements.txt
-    ```
+Change into the downloaded repository folder (probably located in `~/ML-generalization/`) and install all dependencies via `pipenv`:
+```
+cd ~/ML-generalization
+pipenv install
+```
+This automatically creates a virtual environment and installs all dependencies into it.
 
-## Running the tests
+### Run commands in the created virtual environment
 
-To run the automated tests, execute `python -m unittest discover`.
+There are two ways to execute commands from within the newly created virtual environment:
+1) Activate the environment by
+    ```
+    pipenv shell
+    ```
+    (For this, you have to be in the same folder as the project's `Pipfile`.)
+
+1) Invoke shell commands without explicitely activating the environment:
+    ```
+    pipenv run <command>
+    ```
+    (Example: `pipenv run python generalization.py` or `pipenv run pytest -v`)
+
 
 ## Run and control the software
 
 Take a look at [the documentation](http://ml-generalization.readthedocs.io/en/latest/) for detailed information.
 
+
+## Running the tests
+
+In order to run the tests, install the development requirements first (this has to be done just once):
+```
+pipenv install --dev
+```
+
+Then, simply run `pytest` in the previously installed virtual environment. For example:
+```
+pipenv run pytest -v --cov=generalization
+```
+
+
 ## Uninstall the software
 
-To uninstall everything, deactivate the virtual environment (with `deactivate`) and just delete the following folders:
-- `<myenv>` (the folder specified above during virtual environment setup)
-- `build` (in the same directory as `setup.py`)
-- `dist` (in the same directory as `setup.py`)
-- `generalization.egg-info` (in the same directory as `setup.py`)
+To uninstall all installed dependencies, simply run
+```
+pipenv uninstall --all
+```
+
+In order to also remove the virtual environment that has been created by `pipenv`, remove the corresponding folder in `/home/<user>/.local/share/virtualenvs/`.

@@ -2,8 +2,11 @@
 Usage
 =====                          
                                                                                            
-In order to execute the program, run
-    ``python generalization.py``.                           
+In order to execute the program, run::
+  
+  python generalization.py
+  
+(If you did not activate the virtual environment with ``pipenv shell``, prepend ``pipenv run `` to the above command!)
                                                                                            
 For the most part, the program is controlled by the three configuration files located in ``config/``.                                                                                  
                                                 

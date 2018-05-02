@@ -20,7 +20,7 @@ schedule: "every two weeks"
 # search for requirement files
 # default: True
 # allowed: True, False
-search: True
+search: False
 
 # Specify requirement files by hand, default is empty
 # default: empty
@@ -37,6 +37,9 @@ search: True
 #      # update insecure only, pin all
 #      update: insecure
 #      pin: True
+requirements:
+  - Pipfile
+  - Pipfile.lock
 
 # add a label to pull requests, default is not set
 # requires private repo permissions, even on public repos

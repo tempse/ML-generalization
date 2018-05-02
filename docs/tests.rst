@@ -2,10 +2,8 @@
 Running the tests
 *****************
 
-To run the automated tests, execute either
+To run the automated tests, execute::
 
-    ``python -m unittest discover``
+  pytest -v --cov=generalization
 
-    or
-
-    ``pytest``
+(If you did not activate the virtual environment with ``pipenv shell``, you have to preprend ``pipenv run `` to the above command!)
