@@ -18,6 +18,8 @@ matplotlib = "==2.2.0"
 scikit-learn = "*"
 scikit-optimize = "*"
 seaborn = "*"
+sphinx = "*"
+sphinx-autobuild = "*"
 
 [requires]
 python_version = "3.5"
