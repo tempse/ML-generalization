@@ -2,9 +2,9 @@
 Uninstallation
 **************
 
-To uninstall everything, deactivate the virtual environment (with ``deactivate``) and delete the following folders (if existing):
+To uninstall all installed dependencies, simply run::
 
-- ``<myenv>`` (the folder specified above during the virtual environment setup)
-- ``build`` (in the same directory as ``setup.py``)
-- ``dist`` (in the same directory as ``setup.py``)
-- `generalization.egg-info`` (in the same directory as ``setup.py``)
+    pipenv uninstall --all
+
+
+In order to also remove the virtual environment that has been created by ``pipenv``, remove the corresponding folder in ``/home/<user>/.local/share/virtualenvs/``.
