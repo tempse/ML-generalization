@@ -3,6 +3,15 @@ Version history
 ===============
 
 
+0.1.3 (2018-05-02)
+------------------
+
+- switch installation method to pipenv
+- update documentation for the use of pipenv
+- remove landscape integration
+- integrate Better Code Hub
+
+
 0.1.2 (2018-04-01)
 -----------------
 
