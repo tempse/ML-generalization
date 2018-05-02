@@ -34,7 +34,6 @@ jobs:
           name: install dependencies
           command: |
             mkdir -p ${TEST_REPORTS}
-            pip install --upgrade pip
             pip install pipenv
             pipenv install --system --dev
             #python3 -m venv venv
