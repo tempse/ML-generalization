@@ -14,3 +14,14 @@ def set_matplotlib_backend():
 @pytest.fixture()
 def classification_data():
     return make_classification(n_features=5, random_state=1)
+
+@pytest.fixture()
+def data_config_required_keys():
+    required_keys = ['data_identifier',
+                     'data_path',
+                     'data_read_func',
+                     'data_target_col',
+                     'data_target_positive_label',
+                     'data_target_negative_label',
+                     'data_preprocessing']
+    return required_keys
