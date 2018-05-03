@@ -7,13 +7,11 @@ python:
 
 install:
   - pip install --upgrade pip
-  #- pip install pipenv
+  - pip install pipenv
   - pipenv install --dev
 
 script:
   - pipenv run pytest -v --cov=generalization
-#  - coverage run tests/test_all.py
-#  - python -m unittest discover tests/
 
 after_success:
    - pipenv run codecov
