@@ -1,0 +1,16 @@
+import pytest
+import os
+
+from sklearn.datasets import make_classification
+
+
+@pytest.fixture(scope='module', autouse=True)
+def set_matplotlib_backend():
+    if os.environ.get('DISPLAY') == '':
+        print('No display name found. Using matplotlib \'Agg\' backend.')
+        import matplotlib
+        matplotlib.use('Agg')
+
+@pytest.fixture()
+def classification_data():
+    return make_classification(n_features=5, random_state=1)
