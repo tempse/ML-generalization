@@ -29,6 +29,7 @@ def test_ignore_warnings():
     pass
         
 
+@pytest.mark.slowtest
 def test_get_optimal_CV_n_folds(classification_data):
     X, y = classification_data
     nfolds = get_optimal_CV_n_folds(X, y)
