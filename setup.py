@@ -7,7 +7,7 @@ def read(fname):
 
 setup(
     name='generalization',
-    version='0.1.3',
+    version='0.1.4',
     author='Sebastian Templ, Sebastian Ratzenböck, Florian Mallinger',
     author_email = "sebastian.templ@oeaw.ac.at",
     description = ("A machine learning framework for classifier " \

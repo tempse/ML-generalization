@@ -3,6 +3,14 @@ Version history
 ===============
 
 
+0.1.4 (2018-05-04)
+------------------
+
+- switch from unittest to pytest
+- improve test coverage
+- project restructuring
+
+
 0.1.3 (2018-05-02)
 ------------------
 
