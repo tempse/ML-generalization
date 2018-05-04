@@ -25,3 +25,12 @@ def data_config_required_keys():
                      'data_target_negative_label',
                      'data_preprocessing']
     return required_keys
+
+@pytest.fixture()
+def config_file_contents_simple():
+    contents = '[section]\n' \
+               'key_int: 42\n' \
+               'key_float: 4.2\n' \
+               'key_string: \'fortytwo\'\n' \
+               'key_boolean: True\n'
+    return contents
