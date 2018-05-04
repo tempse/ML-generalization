@@ -21,9 +21,8 @@ def load_data(data_params):
     """
 
     if not os.path.exists(data_params['data_path']):
-        print('Error when loading the data. File {} is not a regular ' \
-              'file.'.format(data_params['data_path']))
-        sys.exit()
+        raise OSError('File {} is not a regular ' \
+                      'file.'.format(data_params['data_path']))
 
     read_func = data_params['data_read_func']
 
