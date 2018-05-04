@@ -34,3 +34,10 @@ def config_file_contents_simple():
                'key_string: \'fortytwo\'\n' \
                'key_boolean: True\n'
     return contents
+
+@pytest.fixture()
+def csv_file_contents_simple():
+    contents = 'featA featB featC\n' \
+               '1.0 1.1 1.2\n' \
+               '2.0 2.1 2.2\n'
+    return contents
