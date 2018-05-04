@@ -31,9 +31,6 @@ def evaluate_nfold(X, y, model, num_test_samples, scoring='f1_score',
 
     """
 
-    if not isinstance(X, pd.DataFrame) and not isinstance(X, np.ndarray):
-        raise ValueError('feature matrix X is neither a numpy array nor a pandas dataframe')
-
     if not isinstance(y, pd.DataFrame) and not isinstance(y, np.ndarray) and \
         not isinstance(y, pd.core.series.Series):
         raise ValueError('target vector y is neither a numpy array nor a pandas dataframe')

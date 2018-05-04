@@ -12,8 +12,6 @@ install:
 
 script:
   - pipenv run pytest -v --cov=generalization
-#  - coverage run tests/test_all.py
-#  - python -m unittest discover tests/
 
 after_success:
    - pipenv run codecov

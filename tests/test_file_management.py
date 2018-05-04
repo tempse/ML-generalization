@@ -1,119 +1,134 @@
+import pytest
 import os
-import unittest
-import tempfile
+import time
+import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
 
 from generalization.file_management import OutputManager, delete_old_sessions
 from generalization.utils import ignore_warnings
 
 
-class TestFileManagement(unittest.TestCase):
+@pytest.mark.slowtest
+def test_delete_old_sessions(tmpdir):
+    num_testfolders = 15
+    num_keep_folders = 3
 
-    def setUp(self):
-        if os.environ.get('DISPLAY') == '':
-            print('No display name found. Using matplotlib Agg backend. ' \
-                  '(Current class: {})'.format(self.__class__.__name__))
-            import matplotlib
-            matplotlib.use('Agg')
+    for i in range(num_testfolders):
+        tmpdir.mkdir('session_{}'.format(i))
+        time.sleep(.1) # provide a coarse enough time resolution
 
-    def test_delete_old_sessions(self):
-        import time
+    assert len(os.listdir(str(tmpdir))) == num_testfolders
 
-        with tempfile.TemporaryDirectory() as tmpdir:
-            saved_path = os.getcwd()
-            os.chdir(tmpdir)
-            num_testfolders = 15
-            num_keep_folders = 3
-            for i in range(num_testfolders):
-                os.makedirs(tmpdir + '/session_{}'.format(i))
-                time.sleep(.1) # provide a coarse enough time resolution
+    # test case: set higher limit to skip cleanup
+    num_folders_before = len(os.listdir(str(tmpdir)))
+    delete_old_sessions(str(tmpdir), keep_sessions=num_testfolders+1)
+    assert len(os.listdir(str(tmpdir))) == num_folders_before
 
-            assert len(os.listdir(tmpdir)) == num_testfolders
+    # test case: remove all but the latest 'num_keep_folders' folders
+    delete_old_sessions(str(tmpdir), keep_sessions=num_keep_folders)
+    assert len(os.listdir(str(tmpdir))) == num_keep_folders
 
-            # test case: set higher limit to skip cleanup
-            num_folders_before = len(os.listdir(tmpdir))
-            delete_old_sessions(tmpdir, keep_sessions=num_testfolders+1)
-            assert len(os.listdir(tmpdir)) == num_folders_before
+    for i in range(num_testfolders-num_keep_folders):
+        assert not os.path.exists(str(tmpdir) + '/session_{}'.format(i))
 
-            # test case: remove all but the latest 'num_keep_folders' folders
-            delete_old_sessions(tmpdir, keep_sessions=num_keep_folders)
+    for i in range(num_testfolders-num_keep_folders, num_testfolders):
+        assert os.path.exists(str(tmpdir) + '/session_{}'.format(i))
 
-            assert len(os.listdir(tmpdir)) == num_keep_folders
+    # test case: call cleanup, but actually skip it
+    num_folders_before = len(os.listdir(str(tmpdir)))
+    delete_old_sessions(str(tmpdir), keep_sessions=None)
+    assert len(os.listdir(str(tmpdir))) == num_folders_before
 
-            for i in range(num_testfolders-num_keep_folders):
-                assert not os.path.exists(tmpdir + '/session_{}'.format(i))
+    # test case: check handling of invalid paths
+    with pytest.raises(OSError):
+        delete_old_sessions('no_chance_this_path_exists')
 
-            for i in range(num_testfolders-num_keep_folders, num_testfolders):
-                assert os.path.exists(tmpdir + '/session_{}'.format(i))
+    # test misc. error handling
+    with pytest.raises(ValueError):
+        delete_old_sessions(False)
 
-            # test case: call cleanup, but actually skip it
-            num_folders_before = len(os.listdir(tmpdir))
-            delete_old_sessions(tmpdir, keep_sessions=None)
-            assert len(os.listdir(tmpdir)) == num_folders_before
+    with pytest.raises(ValueError):
+        delete_old_sessions(str(tmpdir), keep_sessions='invalid type')
 
-            # test case: check handling of invalid paths
-            with self.assertRaises(OSError):
-                delete_old_sessions('no_chance_this_path_exists')
-
-            os.chdir(saved_path)
+    with pytest.raises(ValueError):
+        delete_old_sessions(str(tmpdir), keep_sessions=-1)
 
 
-    @ignore_warnings
-    def test_OutputManager(self):
-        import numpy as np
-        import pandas as pd
-        import matplotlib.pyplot as plt
+def test_OutputManager(tmpdir, monkeypatch):
+    saved_path = os.getcwd()
+    
+    om = OutputManager(str(tmpdir) + '/output/')
+    assert os.path.exists(str(tmpdir) + '/output/')
 
-        with tempfile.TemporaryDirectory() as tmpdir:
-            saved_path = os.getcwd()
-            os.chdir(tmpdir)
-            om = OutputManager('output/')
+    os.chdir(str(tmpdir)+'/output/')
+    
+    try:
+        session_name = sorted([f for f in os.listdir(str(tmpdir)+'/output/')],
+                              key=os.path.getctime)[-1]
+    except IndexError:
+        raise IndexError('no session output folder created in {}'.format(
+            str(tmpdir)))
 
-            assert os.path.exists(tmpdir+'/output/')
+    # test numpy object saving
+    om.save(np.ones((3,3)), 'numpytest')
+    assert os.path.exists(str(tmpdir)+'/output/'+session_name+'/numpytest.npy')
 
-            os.chdir(tmpdir+'/output/')
+    # test matplotlib object saving
+    om.save(plt.figure(), 'matplotlibtest')
+    assert os.path.exists(str(tmpdir)+'/output/'+session_name+'/matplotlibtest.png')
+    
+    # test pandas dataframe saving
+    om.save(pd.DataFrame([1,2,3]), 'pandastest')
+    assert os.path.exists(str(tmpdir)+'/output/'+session_name+'/pandastest.npy')
+    
+    # test pandas dataframe saving (to ARFF)
+    om.save(pd.DataFrame([1,2,3], columns=['duh']),
+            'pandasarfftest', to_arff=True)
+    assert os.path.exists(str(tmpdir)+'/output/'+session_name+'/pandasarfftest.arff')
+    
+    # test generic object saving
+    om.save(['what','a','pointless','list'], 'pickletest')
+    assert os.path.exists(str(tmpdir)+'/output/'+session_name+'/pickletest.pkl')
 
-            try:
-                session_name = sorted([f for f in os.listdir(tmpdir+'/output/')],
-                                      key=os.path.getctime)[-1]
-            except IndexError:
-                raise IndexError('no session output folder created in {}'.format(
-                    tmpdir))
+    # test error handling
+    with pytest.raises(ValueError):
+        om.save(np.ones((2,2)), 999)
 
-            # test numpy object saving
-            om.save(np.ones((3,3)), 'numpytest')
-            assert os.path.exists(tmpdir+'/output/'+session_name+'/numpytest.npy')
+    with pytest.raises(ValueError):
+        om.save(np.ones((1,1)), 'numpyfail', folder=False)
 
-            # test matplotlib object saving
-            om.save(plt.figure(), 'matplotlibtest')
-            assert os.path.exists(tmpdir+'/output/'+session_name+'/matplotlibtest.png')
+    with pytest.raises(ValueError):
+        om.save(np.ones((1,1)), 'arfffail', to_arff=999)
+    
+    # test subfolder creation
+    subfolder_name = 'subfolder'
+    om.save(['make','me','a','subfolder'], 'subfolderlist', folder=subfolder_name)
+    assert os.path.exists(str(tmpdir)+'/output/'+session_name+'/'+subfolder_name+\
+                          'subfolderlist.pkl')
 
-            # test pandas dataframe saving
-            om.save(pd.DataFrame([1,2,3]), 'pandastest')
-            assert os.path.exists(tmpdir+'/output/'+session_name+'/pandastest.npy')
+    # test misc. error handling    
+    with pytest.raises(ValueError):
+        om_2 = OutputManager(False)
 
-            # test pandas dataframe saving (to ARFF)
-            om.save(pd.DataFrame([1,2,3], columns=['duh']),
-                    'pandasarfftest', to_arff=True)
-            assert os.path.exists(tmpdir+'/output/'+session_name+'/pandasarfftest.arff')
+    with pytest.raises(ValueError):
+        om_2 = OutputManager(str(tmpdir)+'/output_2', keep_sessions='invalid type')
 
-            # test generic object saving
-            om.save(['what','a','pointless','list'], 'pickletest')
-            assert os.path.exists(tmpdir+'/output/'+session_name+'/pickletest.pkl')
+    # test get_session_folder
+    assert isinstance(om.get_session_folder(), str)
+    with pytest.raises(OSError):
+        om.get_session_folder('not an actual subfolder')
 
-            # test subfolder creation
-            subfolder_name = 'subfolder'
-            om.save(['make','me','a','subfolder'], 'subfolderlist', folder=subfolder_name)
-            assert os.path.exists(tmpdir+'/output/'+session_name+'/'+subfolder_name+\
-                                  'subfolderlist.pkl')
+    with pytest.raises(ValueError):
+        om.get_session_folder(False)
 
-            # test get_session_folder
-            assert isinstance(om.get_session_folder(), str)
-            with self.assertRaises(OSError):
-                om.get_session_folder('notAnActualSubfolder')
+    # monkeypatching (changing certain attributes such that some test should fail)
+    monkeypatch.setattr(om, 'session_dir', 'non-existing folder')
+    
+    with pytest.raises(IOError):
+        om.get_session_folder()
 
-            os.chdir(saved_path)
+    with pytest.raises(OSError):
+        om.save(np.ones((3,3)), 'numpyfail')
 
-
-
-if __name__ == '__main__':
-    unittest.main()
+    os.chdir(saved_path)

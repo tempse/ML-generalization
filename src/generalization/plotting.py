@@ -48,7 +48,7 @@ def plot_performance_diff(*arrays, **options):
     if not isinstance(ylabel, str) and ylabel is not None:
         raise ValueError('ylabel has to be a string, but is {}.'.format(type(ylabel)))
 
-    if len(labels) != (len(arrays)-1)*0.5 and labels is not None:
+    if labels is not None and len(labels) != (len(arrays)-1)*0.5:
         raise ValueError('the number of labels does not match the number of ' \
                          'passed arrays: {}'.format(len(labels)))
 

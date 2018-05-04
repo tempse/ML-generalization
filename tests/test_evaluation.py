@@ -1,73 +1,144 @@
-import os
-import unittest
+import pytest
+from pytest import approx
+from sklearn.naive_bayes import GaussianNB
+from sklearn.model_selection import train_test_split
+import pandas as pd
 
-from sklearn.datasets import make_classification
-
-from generalization.evaluation import performance_difference, evaluate_nfold
-from generalization.utils import ignore_warnings
-
-
-class TestEvaluation(unittest.TestCase):
-
-    def setUp(self):
-        if os.environ.get('DISPLAY') == '':
-            print('No display name found. Using matplotlib Agg backend. ' \
-                  '(Current class: {})'.format(self.__class__.__name__))
-            import matplotlib
-            matplotlib.use('Agg')
-
-    @ignore_warnings
-    def test_evaluate_nfold(self):
-        from sklearn.naive_bayes import GaussianNB
-        from sklearn.model_selection import train_test_split
-        import pandas as pd
-
-        X, y = make_classification(n_features=5, random_state=1)
-        model = GaussianNB()
-
-        X_train, X_test, y_train, y_test = train_test_split(X, y,
-                                                            test_size=0.5,
-                                                            random_state=1)
-        model.fit(X_train, y_train)
-        num_folds = 3
-
-        scores = evaluate_nfold(X_test, y_test, model, num_folds, randomize=False)
-        self.assertEqual(len(scores), num_folds)
-        self.assertTrue(all((scores[i]>=0) & (scores[i]<=1) \
-                            for i in range(len(scores))))
-
-        scores = evaluate_nfold(X_test, y_test, model, num_folds, randomize=True)
-        self.assertEqual(len(scores), num_folds)
-        self.assertTrue(all((scores[i]>=0) & (scores[i]<=1) \
-                            for i in range(len(scores))))
-
-        scores = evaluate_nfold(pd.DataFrame(X_test), pd.DataFrame(y_test),
-                                model, num_folds, randomize=True)
-        self.assertEqual(len(scores), num_folds)
-        self.assertTrue(all((scores[i]>=0) & (scores[i]<=1) \
-                            for i in range(len(scores))))
-
-        num_folds = 0
-        with self.assertRaises(ValueError):
-            scores = evaluate_nfold(X_test, y_test, model, num_folds, randomize=False)
+from generalization.evaluation import evaluate_nfold, \
+    performance_difference
 
 
-    def test_performance_difference(self):
-        a = [1,2,3]
-        mean, std = performance_difference(a)
-        self.assertAlmostEqual(mean, 4/3.0)
-        self.assertAlmostEqual(std, 0.47140452)
+def test_evaluate_nfold_with_numpy_arrays(classification_data):
+    X, y = classification_data
+    model = GaussianNB()
+    X_train, X_test, y_train, y_test = train_test_split(X, y,
+                                                        test_size=0.5,
+                                                        random_state=1)
+    model.fit(X_train, y_train)
+    num_folds = 1
 
-        b = [1,3]
-        mean, std = performance_difference(b)
-        self.assertEqual(mean, 2)
-        self.assertEqual(std, 0)
+    scores = evaluate_nfold(X_test, y_test, model,
+                            num_folds)
+    assert len(scores) == num_folds
+    assert all((scores[i]>=0) & (scores[i]<=1) \
+               for i in range(len(scores))) == True
 
-        c = [5]
-        mean, std = performance_difference(c)
-        self.assertEqual(mean, 0.)
-        self.assertEqual(std, 0.)
+    num_folds = 3
+    scores = evaluate_nfold(X_test, y_test, model,
+                            num_folds)
+    assert len(scores) == num_folds
+    assert all((scores[i]>=0) & (scores[i]<=1) \
+               for i in range(len(scores))) == True
 
 
-if __name__ == '__main__':
-    unittest.main()
+def test_evaluate_nfold_with_pandas_dataframes(classification_data):
+    X, y = classification_data
+    model = GaussianNB()
+    X_train, X_test, y_train, y_test = train_test_split(X, y,
+                                                        test_size=0.5,
+                                                        random_state=1)
+    model.fit(X_train, y_train)
+    num_folds = 3
+
+    scores = evaluate_nfold(pd.DataFrame(X_test), pd.DataFrame(y_test),
+                            model, num_folds)
+    assert len(scores) == num_folds
+    assert all((scores[i]>=0) & (scores[i]<=1) \
+               for i in range(len(scores))) == True
+
+
+def test_evaluate_nfold_randomize(classification_data):
+    X, y = classification_data
+    model = GaussianNB()
+    X_train, X_test, y_train, y_test = train_test_split(X, y,
+                                                        test_size=0.5,
+                                                        random_state=1)
+    model.fit(X_train, y_train)
+    num_folds = 2
+
+    scores = evaluate_nfold(X_test, y_test, model,
+                            num_folds, randomize=True)
+    assert len(scores) == num_folds
+    assert all((scores[i]>=0) & (scores[i]<=1) \
+               for i in range(len(scores))) == True
+    
+
+def test_evaluate_nfold_bootstrapping(classification_data):
+    X, y = classification_data
+    model = GaussianNB()
+    X_train, X_test, y_train, y_test = train_test_split(X, y,
+                                                        test_size=0.5,
+                                                        random_state=1)
+    model.fit(X_train, y_train)
+    num_folds = 3
+
+    scores = evaluate_nfold(pd.DataFrame(X_test), pd.DataFrame(y_test),
+                            model, num_folds, bootstrapping=True)
+    assert len(scores) == num_folds
+    assert all((scores[i]>=0) & (scores[i]<=1) \
+               for i in range(len(scores))) == True
+
+
+def test_evaluate_nfold_fail_due_to_zero_folds(classification_data):
+    X, y = classification_data
+    model = GaussianNB()
+    num_folds = 0
+    with pytest.raises(ValueError):
+        evaluate_nfold(X, y, model, num_folds)
+
+
+def test_evaluate_nfold_fail_due_to_invalid_data():
+    X = 'not a numpy array...'
+    y = '...nor a pandas data structure'
+    model = GaussianNB()
+    num_folds = 3
+    with pytest.raises(ValueError):
+        evaluate_nfold(X, y, model, num_folds)
+
+
+def test_evaluate_nfold_fail_due_to_invalid_num_folds(classification_data):
+    X, y = classification_data
+    num_folds = 'not an integer'
+    with pytest.raises(ValueError):
+        evaluate_nfold(X, y, GaussianNB(), num_folds)
+
+def test_evaluate_nfold_fail_due_to_invalid_scoring_func(classification_data):
+    X, y = classification_data
+    num_folds = 3
+    scoring_func = 'invalid function'
+    with pytest.raises(ValueError):
+        evaluate_nfold(X, y, GaussianNB(), num_folds, scoring=scoring_func)
+
+def test_evaluate_nfold_fail_due_to_invalid_bootstripping_param(classification_data):
+    X, y = classification_data
+    num_folds = 3
+    bootstrapping = 'non-Boolean'
+    with pytest.raises(ValueError):
+        evaluate_nfold(X, y, GaussianNB(), num_folds,
+                       bootstrapping=bootstrapping)
+
+
+def test_performance_difference_of_three():
+    a = [1,2,3]
+    mean, std = performance_difference(a)
+    assert mean == approx(4/3.0)
+    assert std == approx(0.47140452)
+
+
+def test_performance_difference_of_two():
+    a = [1,3]
+    mean, std = performance_difference(a)
+    assert mean == 2.0
+    assert std == 0.0
+
+
+def test_performance_difference_of_one():
+    a = [5]
+    mean, std = performance_difference(a)
+    assert mean == 0.0
+    assert std == 0.0
+
+
+def test_performance_difference_invalid_input():
+    with pytest.raises(ValueError):
+        performance_difference('non-sequence object')
