@@ -8,6 +8,9 @@ pytest = "*"
 codecov = "*"
 coverage = "*"
 pytest-cov = "*"
+"flake8" = "*"
+pylint = "*"
+pyflakes = "*"
 
 [packages]
 numpy = "*"
