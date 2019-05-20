@@ -126,10 +126,9 @@
         },
         "liac-arff": {
             "hashes": [
-                "sha256:f4b60475e7473c4c42665f106ef87fe94fbf1e4cac7571903153ad38c3167c69"
+                "sha256:47afcd1fd248b2892f66075987422d0576fc2c2fd0811d0cbd32f2135b065df5"
             ],
-            "index": "pypi",
-            "version": "==2.2.2"
+            "version": "==2.4.0"
         },
         "livereload": {
             "hashes": [
